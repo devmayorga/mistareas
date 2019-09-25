@@ -1,43 +1,7 @@
 <?php
-$partialsPath = "Partials.php";
-$backgroundPath = "img/fondo-01.png";
-$logoPath = "img/logo.png";
-if(isset($callingFromLogin) )
-{
-	if($callingFromLogin)
-	{
-		$partialsPath = "../../" . $partialsPath ;
-		$backgroundPath = "../../" . $backgroundPath;
-		$logoPath = "../../" . $logoPath ; 
-		$callingFromLogin = true ;
-	}
-	// else
-	// {
-		// $partialsPath = "Partials.php";
-		// $backgroundPath = "img/fondo-01.png";
-		// $logoPath = "img/logo.png";
-	// }
-}
-include_once($partialsPath);
-
-
-// $partialToRender debe ser inicializada en la pagina desde donde se invoca este master-header
-if(!isset($partialToRender))
-{
-	echo "ERROR";
-}
-
-?>
-
-
-
-
-
-
-<?php
 session_start();
 $appid = "mistareas.com.mx";
-
+include_once("Partials.php");
 // - - - > Call function to verify if user is authenticated
 if(isset($_SESSION["User"]))
 {
@@ -85,18 +49,45 @@ if(isset($_SESSION["User"]))
     <div class="container">
       
 	  <div class="row">
-			
-			<div id="d-bigcontainer">
-				<?php
-				Partial($partialToRender, null,null);
-				?>
-			</div>
+		
       
+		
+        <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+			
+          <form action="utils/auth/login3.php" method="post">
+			
+			<br /><br /><br />
+            
+			<div class="form-row text-center">
+				<h2>
+			Entrar en <?php echo $appid ; ?>
+			</h2>
+			  <div class="col-12 col-md-9 mb-2 mb-md-0">
+                <input name="txt_user" type="text" class="form-control form-control-lg" placeholder="Usuario.." />
+                <input name="txt_pass" type="password" class="form-control form-control-lg" placeholder="Password..." />
+				<input type="submit" class="btn btn-block btn-lg btn-primary" value="Entrar" name="send" />
+				<input type="hidden"  value="<?php echo $appid ; ?>" name="appid" />
+				<br />
+				<a href="index.php"  class="btn btn-block btn-lg btn-primary">Volver</a>
+              </div>
+			  
+			  
+              
+            </div>
+          </form>
+        </div>
+		
+		
       </div>
     </div>
   </header>
 
- 
+		<?php
+			
+		Partial("partial-footer", null, "");
+
+		?>  
+  
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -104,43 +95,3 @@ if(isset($_SESSION["User"]))
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

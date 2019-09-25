@@ -91,7 +91,8 @@ else
 		header("location:home.php");
 	}
 	?>
-    <h1 class="mt-4 mb-3">
+	<br />
+    <h1 class="mt-4 mb-3 text-center">
 		<?php echo $currentProject->Name  ; ?>
       <small>
 		
@@ -99,18 +100,8 @@ else
 			if ( $currentProject->Id != -1 )
 			{
 				?>
-				<a href="project_edit.php?p=<?php echo $currentProject->Id ; ?>">editar</a>
-				<div class="tasks-list-actions" id="task-add-button" style=" width:2em ; display:inline;">
-						<?php
-						if($currentProject->Id != -1)
-						{
-							?>
-							<img src="img/add-color.png" class="img-add" style=" width:3em ;" />
-							<?php
-							
-						}
-						?>						
-				</div>
+				<a href="project_edit.php?p=<?php echo $currentProject->Id ; ?>"><img src="img/left-color.png" /></a>
+				
 				<!-- <img class="img-pdf" src="img/pdf-color.png" /> -->
 				<?php
 			}
@@ -120,19 +111,64 @@ else
 
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <a href="home.php">Inicio</a>
+        
       </li>
       <li class="breadcrumb-item "><a href="home.php">Proyectos</a></li>
-	  <li class="breadcrumb-item active"><?php echo $currentProject->Name ; ?></li>
-      
-	  
-	  
-	  
+	  <li class="breadcrumb-item active ">
+	  <?php
+	  if($currentProject->Id > 0)
+	  {
+		  ?>
+		  <a href="todolist.php?p=<?php echo $currentProject->Id ; ?>"><?php echo $currentProject->Name ; ?>
+		   </a>
+		  <?php
+	  }
+	  else
+	  {
+		  echo $currentProject->Name ; 
+	  }
+	  ?>	  
+	  </li>
+		<?php
+		if($currentProject->Id != -1)
+		{
+			?>
+			<li id="task-add-button" class="breadcrumb-item" style="color: #007bff ; cursor:pointer;">
+			[+]
+			</li>
+			<?php
+			
+		}
+		?>
     </ol>
 	
 	<?php
 	Partial("partial-task-add", $currentProject, "");
 	?>
+
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel">Asignar Usuario</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		  </div>
+		  <div class="modal-body">
+			<p>
+			</p>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+
+
+
+
 
     <div class="mb-4" id="accordion" role="tablist" aria-multiselectable="true">
       
@@ -150,54 +186,7 @@ else
 	  ?>
 	  
 	  
-	  
-	  <!--
-	  <div class="card">
-        <div class="card-header" role="tab" id="headingOne">
-          <h5 class="mb-0">
-            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Collapsible Group Item #1</a>
-          </h5>
-        </div>
-
-        <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
-          <div class="card-body">
-            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-          </div>
-        </div>
-      </div>
-	  
-	  
-	  
-      <div class="card">
-        <div class="card-header" role="tab" id="headingTwo">
-          <h5 class="mb-0">
-            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Collapsible Group Item #2
-            </a>
-          </h5>
-        </div>
-        <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
-          <div class="card-body">
-            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header" role="tab" id="headingThree">
-          <h5 class="mb-0">
-            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Collapsible Group Item #3</a>
-          </h5>
-        </div>
-        <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
-          <div class="card-body">
-            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-          </div>
-        </div>
-      </div>
-    
-	
-	
-	-->
-	</div>
+	 </div>
 
   </div>
   <!-- /.container -->
@@ -235,6 +224,15 @@ function activateTaskItemActions()
 			}
 		});
 		/************************/
+		
+		/*** cancel share button********/
+		$(".btn-share-cancel").click(function(){
+				$(this).parent().find("input[name='assigned-userid']").val("");
+				$(this).parent().find("input[type='submit']").prop("disabled", "disabled");
+				$(this).parent().parent().parent().find(".img-share").click();
+		});
+		/************************/
+		
 		
 		
 		/*** completed checkbox */
@@ -304,6 +302,44 @@ function activateTaskItemActions()
 	
 
 $(document).ready(function(){
+	
+	
+	$('#exampleModal').on('show.bs.modal', function (event) {
+	  var button = $(event.relatedTarget); // Button that triggered the modal
+	  var usuariosAsignables ;
+	  // alert("*" + button.data('whatever').trim().length + "*");
+	  if(  button.data('whatever').trim().length < 1 )
+	  {
+		  usuariosAsignables = {};
+	  }
+	  else
+	  {
+		  usuariosAsignables = JSON.parse(button.data('whatever')); // Extract info from data-* attributes
+	  }
+	  
+	  var tareaNombre = button.data('whatever2') ;// Extract info from data-* attributes
+	  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+	  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+	  var modal = $(this);
+	  modal.find('.modal-body p').empty();
+	  modal.find('.modal-title').text('Seleccione el Usuario a asociar con la Tarea ' + tareaNombre);
+	  modal.find('.modal-body p').text("Usuarios disponibles: ");
+	  // modal.find('.modal-body p').append("<ul></ul>");
+	  $.each(usuariosAsignables, function(key, item){
+		modal.find('.modal-body p ').append("<br /><button data-dismiss='modal' class='btn btn-primary candidato' value='"+ item.Id +"'>"+ item.Id + "-" + item.Name +"</button>");  
+	  });
+	  modal.find(".candidato").click(function(){
+		  // alert($(this).val());
+		  button.parent().find("input[name='assigned-userid']").val($(this).val());
+		  button.parent().find("input[type='submit']").prop("disabled","");
+	  });
+	  
+	  
+	})
+	
+	
+	
+	
 	$('#add-project-button').hide();
 	$('#description').focus();
 	

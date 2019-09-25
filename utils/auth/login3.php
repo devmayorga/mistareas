@@ -40,7 +40,7 @@ elseif (! ( isset($_POST["txt_user"]) && isset($_POST["txt_pass"]) && isset($_PO
 					<table>	
 						<tr>
 							<td>&nbsp;</td>
-							<td><a href="../../user_create.php">Click aqui si aun no se encuentra inscrito en <span style="font-weight: bold;"><?php echo $_GET ["appid"] ;?></span></a></td>
+							<td><a href="../../user_create.php">Click aqui si aun no se encuentra inscrito en <span style="font-weight: bold;"><?php echo $_POST ["appid"] ;?></span></a></td>
 						</tr>
 						<tr>
 							<th>User</th>

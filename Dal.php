@@ -156,7 +156,7 @@ class Dal
 	
 	function getUserIdByTask($taskid)
 	{
-		$method = "Dal.getAvaliableProjectsForTask";
+		$method = "Dal.getUserIdByTask";
 		try
 		{		
 			
@@ -416,6 +416,77 @@ class Dal
 		}
 		
 	}
+	
+	
+	function getAssignedUsers($taskid)
+	{
+		$Users = null ;
+		include_once("User.php");
+		$method = "Dal.getAssignedUsers";
+		try
+		{
+			mysqli_begin_transaction($this->con);
+			// $sql = "insert into r_task_user (taskid, userid) values ('". $taskid  ."', '". $userid ."')";
+			$sql = " CALL `sp_getAssignedUsers`('". $taskid ."');";
+			// die($sql);
+			$res = mysqli_query($this->con, $sql);
+			mysqli_commit($this->con);
+			while($row = mysqli_fetch_assoc($res))
+			{
+				$User = new User(
+					 $row["userid"]
+					 , $row["username"]
+					);
+				$Users[] = $User ; 
+				
+			}
+			return $Users ; 
+		}
+		catch (Exception $e) 
+		{
+			mysqli_rollback($this->con);
+			return false ;
+		}
+		
+	}
+	
+	function getUnassignedUsers($taskid)
+	{
+		$Users = null ;
+		include_once("User.php");
+		$method = "Dal.getUnassignedUsers";
+		try
+		{
+			mysqli_begin_transaction($this->con);
+			
+			$sql = " CALL `sp_getUnassignedUsers`('". $taskid ."');";
+			//die($sql);
+			$res = mysqli_query($this->con,$sql) or die ("Error in method ". $method ."... MySQL dice: " . mysqli_error($this->con) );
+			
+			mysqli_commit($this->con);
+			while($row = mysqli_fetch_assoc($res))
+			{
+				$User = new User(
+					 $row["userid"]
+					 , $row["username"]
+					);
+				$Users[] = $User ; 
+				
+			}
+			return $Users ; 
+		}
+		catch (Exception $e) 
+		{
+			mysqli_rollback($this->con);
+			return false ;
+		}
+		
+	}
+	
+	
+	
+	
+	
 
 
 	

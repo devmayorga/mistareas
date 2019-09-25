@@ -26,6 +26,9 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
           <div class="card-body">
             <h4 class="card-title">
               Recursos Académicos
+			  <?php
+			  $type=$documentoAcademico ;
+			  ?>
             </h4>
             <p class="card-text">
 			
@@ -47,9 +50,9 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
 				else
 				{
 					?>
-					<p>
+					<br />
 					NO HAY DOCUMENTOS AÚN
-					</p>
+					
 				
 				
 					<?php
@@ -83,7 +86,10 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
           <div class="card-body">
             <h4 class="card-title">
               Ejercicios
-            </h4>
+				<?php
+			  $type=$ejercicioEnClase ;
+			  ?>
+			</h4>
             <p class="card-text">
 			
 			<?php
@@ -104,9 +110,9 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
 				else
 				{
 					?>
-					<p>
+					<br />
 					NO HAY DOCUMENTOS AÚN
-					</p>
+					
 				
 				
 					<?php
@@ -140,6 +146,9 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
           <div class="card-body">
             <h4 class="card-title">
               Tareas
+			  <?php
+			  $type=$iniciativasPostClase ;
+			  ?>
             </h4>
             <p class="card-text">
 				
@@ -162,9 +171,9 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
 				else
 				{
 					?>
-					<p>
+					<br />
 					NO HAY DOCUMENTOS AÚN
-					</p>
+					
 				
 				
 					<?php

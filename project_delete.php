@@ -1,57 +1,82 @@
-<link rel="stylesheet" type="text/css" href="Partials.css">
-<!-- Required meta tags -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<?php
+include_once("Partials.php");
+include_once("project_deleteModel.php");
+include_once("todolistModel.php");
+session_start();
 
-<!-- Bootstrap CSS -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+if(!isset($_SESSION["User"]))
+{	
+	$userid = 0 ; 
+}
+else
+{
+	$userid = $_SESSION["User"]["id"];
+}
 
-<title>mistareas.com.mx</title>
+
+
+$Model2 = new todolistModel($userid);
 
 
 
-<div class="container">
+$renderFirstTime = false ;
+
+if(!empty($_GET["p"]))
+{
+	$Model = new project_deleteModel($_GET["p"]);
+	$renderFirstTime = true ;
+}
+
+?>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <?php
+	Partial("partial-metas", null, "");
+  ?>
+
+</head>
+
+<body>
 	<?php
-	  $headerFile = "utils/header-david.php";
-	  // needed in the included file
-	  $callingFromLevelUp = true ; 
-	  include_once($headerFile);
+	Partial("partial-navigator", $Model2->User, "");
 	?>
-  <div class="row">
-	<div class="col" style="background-color: #7dcbe1 ; "></div>
-	<div class="col">
-		<div class="row">
-			<div class="col" style="background-color: #7dcbe1 ; "></div>
-			<div class="col" style="background-color: #f5ddea ; " ></div>
-		  </div>
-	</div>
-	<div class="col" style="background-color: #f5ddea ; " ></div>
-  </div>
-  <div class="row">
-	<div class="col" style="background-color: #7dcbe1 ; "></div>
-	<div class="col" style="min-width:800px; " >
-	
-					<?php
-						session_start();
-						include_once("project_deleteModel.php");
-						if(!empty($_GET["p"])){
-							$Model = new project_deleteModel($_GET["p"]);
-							?>
+ 
+  <!-- Page Content -->
+  <div class="container">
+	<br />
+	<br />
+    
 
+    
 
+    
 
-								Esta a punto de Borrar el Proyecto <?php echo $Model->Project->Name ; ?>. ¿Desea continuar?
-								<form action="project_delete.php" method="post">
-									<input type="hidden" value="<?php echo $Model->Project->Id ; ?>" name="projectid" />
-									<input type="submit" value="Continuar" name="delete-project" />
-									<a href="todolist.php?p=<?php echo $Model->Project->Id ; ?>"><input type="button" value="Cancelar" name="cancelar" /></a>
-								</form>
-
-						<?php
-							}
-							else
-							{	
-								if(isset($_POST["delete-project"]))
+		<?php
+					
+					if($renderFirstTime){
+						
+						?>
+						<p>
+						<h2>
+						Borrando Proyecto: <small>" <?php echo $Model->Project->Name ; ?> "</small>.
+						<h2>
+						<br >
+						¿Desea continuar?
+						<form action="project_delete.php" method="post">
+							<input type="hidden" value="<?php echo $Model->Project->Id ; ?>" name="projectid" />
+							<input class="btn btn-danger" type="submit" value="Continuar" name="delete-project" />
+							<a class="btn btn-secondary" href="project_edit.php?p=<?php echo $Model->Project->Id ; ?>">Cancelar</a>
+						</form>
+						</p>
+					
+				<?php
+					}
+					else
+					{	
+						if(isset($_POST["delete-project"]))
 								{
 									if(isset($_POST["projectid"]))
 									{
@@ -62,7 +87,7 @@
 											?>
 											PROYECTO <?php echo $Model->Project->Name ; ?> BORRADO !
 											<br>
-											<a href="home.php">INICIO</a>
+											
 											<?php
 										}
 										else
@@ -71,33 +96,24 @@
 											PROYECTO <?php echo $Model->Project->Name ; ?> NO BORRADO !
 											<?php
 										}
+										?>
+										<a class="btn btn-primary" href="home.php">INICIO</a>
+										<?php
 									}
 								}
-							}
-							?>
-	
-	
-	</div>
-	<div class="col" style="background-color: #f5ddea ; " ></div>
+					}
+					?>
   </div>
-  <div class="row">
-	<div class="col" style="background-color: #7dcbe1 ; "></div>
-		<div class="row">
-			<div class="col" style="background-color: #7dcbe1 ; "></div>
-			
-			<div class="col" style="background-color: #f5ddea ; " ></div>
-		</div>
-	<div class="col" style="background-color: #f5ddea ; " ></div>
-  </div>
-  
+  <!-- /.container -->
+
   <?php
-  include_once("utils/footer-david.php");
+  Partial("partial-footer", null, "");
   ?>
-  
-</div>
 
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+</body>
+
+</html>

@@ -133,6 +133,24 @@ function Partial($partialToRender, $Model, $css_class)
 			<img src="<?php echo $imagePath ; ?>" />
 			<?php
 		break;
+		case "partial-metas":
+			?>
+			
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+			<meta name="description" content="">
+			<meta name="author" content="">
+
+			<title>mistareas.com.mx</title>
+
+			<!-- Bootstrap core CSS -->
+			<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+			<!-- Custom styles for this template -->
+			<link href="css/modern-business.css" rel="stylesheet">
+			
+			<?php
+		break ;
 		case "partial-header":
 			
 		break;
@@ -222,51 +240,7 @@ function Partial($partialToRender, $Model, $css_class)
 					  <li class="nav-item">
 						<a class="nav-link" href="utils/auth/logout.php"><img src="img/logout-color.png"></a>
 					  </li>
-					<!--
-					  <li class="nav-item">
-						<a class="nav-link" href="about.html">About</a>
-					  </li>
-					  <li class="nav-item">
-						<a class="nav-link" href="services.html">Services</a>
-					  </li>
-					  <li class="nav-item">
-						<a class="nav-link" href="contact.html">Contact</a>
-					  </li>
-					  <li class="nav-item active dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						  Portfolio
-						</a>
-						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
-						  <a class="dropdown-item" href="portfolio-1-col.html">1 Column Portfolio</a>
-						  <a class="dropdown-item" href="portfolio-2-col.html">2 Column Portfolio</a>
-						  <a class="dropdown-item" href="portfolio-3-col.html">3 Column Portfolio</a>
-						  <a class="dropdown-item active" href="portfolio-4-col.html">4 Column Portfolio</a>
-						  <a class="dropdown-item" href="portfolio-item.html">Single Portfolio Item</a>
-						</div>
-					  </li>
-					  <li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownBlog" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						  Blog
-						</a>
-						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownBlog">
-						  <a class="dropdown-item" href="blog-home-1.html">Blog Home 1</a>
-						  <a class="dropdown-item" href="blog-home-2.html">Blog Home 2</a>
-						  <a class="dropdown-item" href="blog-post.html">Blog Post</a>
-						</div>
-					  </li>
-					  <li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownBlog" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						  Other Pages
-						</a>
-						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownBlog">
-						  <a class="dropdown-item" href="full-width.html">Full Width Page</a>
-						  <a class="dropdown-item" href="sidebar.html">Sidebar Page</a>
-						  <a class="dropdown-item" href="faq.html">FAQ</a>
-						  <a class="dropdown-item" href="404.html">404</a>
-						  <a class="dropdown-item" href="pricing.html">Pricing Table</a>
-						</div>
-					  </li>
-					  -->
+					
 					</ul>
 				  
 				  
@@ -310,14 +284,61 @@ function Partial($partialToRender, $Model, $css_class)
 			$_GET["t"] = $Model->Id ; 
 			$_GET["uid"] = $_SESSION["User"]["id"];
 			
-			$Model2 = new task_displayModel($_GET["t"], $_GET["uid"]);
+			$Model2 = new task_displayModel($Model->Id, $_GET["uid"]);
 			?>
 			
-
+			
 			<div class="card">
 				<div class="card-header" role="tab" id="headingOne">
+					<a
+			name="ancla-task-<?php echo $Model->Id ; ?>"
+			 ></a>
 				  <h5 class="mb-0" ref="<?php echo $Model->Id ; ?>">
-					<a data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $Model->Id ;?>" aria-expanded="false" aria-controls="collapse<?php echo $Model->Id ;?>">
+				  
+				    <?php
+					if($_SESSION["User"]["type"] == 1
+						&& $_SESSION["User"]["id"] == $Model2->TaskOwner
+					)
+					{
+						?>
+						
+						
+						<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo<?php echo $Model->Id ; ?>" aria-expanded="false" aria-controls="collapseTwo<?php echo $Model->Id ; ?>"><img src="img/left-color.png" /></a>
+						
+						
+						
+						
+						<?php
+					}
+					?>
+				  
+				  
+					
+					
+					
+					<a 
+					
+					data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $Model->Id ;?>" 
+					<?php 
+					if ( isset($_GET["ariaExpanded"]) && $_GET["ariaExpanded"] === $Model->Id  ) 
+						{
+							?>
+							aria-expanded="true"
+							
+							<?php
+						} 
+						else 
+						{
+							?>
+							aria-expanded="false"
+							
+							<?php
+						}
+
+					?>
+					
+					
+					aria-controls="collapse<?php echo $Model->Id ;?>">
 					<?php echo $Model->Name ; ?>
 					</a>
 					<?php
@@ -355,52 +376,167 @@ function Partial($partialToRender, $Model, $css_class)
 				  
 				</div>
 
-				<div id="collapse<?php echo $Model->Id ;?>" class="collapse" role="tabpanel" aria-labelledby="heading<?php echo $Model->Id ;?>">
+				<div id="collapse<?php echo $Model->Id ;?>" class="<?php echo (isset($_GET["ariaExpanded"]) && $_GET["ariaExpanded"] == $Model->Id  ) ? "collapse show": "collapse"?>" role="tabpanel" aria-labelledby="heading<?php echo $Model->Id ;?>">
 				  <div class="card-body">
 					
 					<?php
 					include("service_task_display.php");
 					?>
 					
-					<?php
+					
+				  </div>
+				  <div class="card-header text-center">
+					
+					<a class="btn btn-secondary"
+					
+					data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $Model->Id ;?>" 
+					aria-controls="collapse<?php echo $Model->Id ;?>">
+					OCULTAR RECURSOS DE LA TAREA "<?php echo $Model->Name ; ?>"
+					</a>
+					
+					
+					
+				</div>
+				</div>
+				
+				
+				
+				<?php
 					if($_SESSION["User"]["type"] == 1
 						&& $_SESSION["User"]["id"] == $Model2->TaskOwner
 					)
 					{
 						?>
 						
-						<div class="card">
-							<div class="card-header text-center" role="tab" id="headingTwo">
-							  <h5 class="mb-0">
-								<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo<?php echo $Model->Id ; ?>" aria-expanded="false" aria-controls="collapseTwo<?php echo $Model->Id ; ?>">
-								
-								<img src="img/left-color.png" />
-								
-								</a>
-							  </h5>
-							</div>
-							<div id="collapseTwo<?php echo $Model->Id ; ?>" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
-							  <div class="card-body">
-								<h6><?php echo $Model->Id ; ?> - <small>TAREA: <?php echo $Model->Name ; ?></small></h6>
-								<div class="tasks-list-item-actions">
 						
-									<a href="task_edit.php?t=<?php echo $Model->Id ; ?>"><img class="img-edit" src="img/edit-color.png"></a>
-									<a href="task_delete.php?t=<?php echo $Model->Id ; ?>"><img class="img-delete" src="img/delete-color.png"></a>
-									<img class="img-chrono" src="img/chrono-color.png" /> 
-									<img class="img-share" src="img/share-color.png" /> 
-									<a href="task_transfer.php?t=<?php echo $Model->Id ; ?>"><img class="img-transfer" src="img/transfer-color.png" /></a>
-									<?php
-										renderPartialShareTaskPanel($Model);
-									?>
-													
+						
+						
+						
+						
+						<div id="collapseTwo<?php echo $Model->Id ; ?>" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+						  <div class="card-body">
+							<h5>ACCIONES DISPONIBLES PARA LA TAREA: <small><?php echo $Model->Name ; ?></small></h5>
+							<div class="tasks-list-item-actions row">
 								
+								
+								<div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+									<div class="card h-100">
+									  <!--
+									  <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+									  -->
+									  <div class="card-body">
+										<h4 class="card-title">
+										  RENOMBRAR
+										</h4>
+										<div class="card-text">
+										
+											<form action="task_edit.php" method="post">
+												<input type="hidden" value="<?php echo $Model->Id ; ?>" name="taskid" />
+												<input type="text"  class="form-control form-control-lg" name="newName" value="<?php echo $Model->Name ; ?>" />
+												<br />
+												<br />
+												<input type="submit" value="Continuar" name="edit-task" class="btn btn-success" />
+											</form>
+										
+										
+										</div>
+									  </div>
+									</div>
+								</div>
+								
+								<div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+									<div class="card h-100">
+									  <!--
+									  <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+									  -->
+									  <div class="card-body">
+										<h4 class="card-title">
+										  BORRAR
+										</h4>
+										<p class="card-text">
+										
+											<a class="btn btn-danger" href="task_delete.php?t=<?php echo $Model->Id ; ?>"> Borrar </a>
+										
+										
+										</p>
+									  </div>
+									</div>
+								</div>
+								
+								<div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+									<div class="card h-100">
+									  <!--
+									  <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+									  -->
+									  <div class="card-body">
+										
+										
+											<img class="img-chrono" src="img/chrono-color.png" /> 
+										
+										
+										
+									  </div>
+									</div>
+								</div>
+								
+								<div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+									<div class="card h-100">
+									  <!--
+									  <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+									  -->
+									  <div class="card-body">
+											
+											
+											
+											<img class="img-share" src="img/share-color.png" /> 
+											<?php
+												renderPartialShareTaskPanel($Model2);
+											?>
+										
+										
+									  </div>
+									</div>
 								</div>
 								
 								
+								<div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+									<div class="card h-100">
+									  <!--
+									  <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+									  -->
+									  <div class="card-body">
+											<h4 class="card-title">
+											  Transferir a otro Proyecto
+											</h4>
+										
+											
+											
+											<?php
+											include_once("task_transferModel.php");
+											$Model3 = new task_transferModel($Model->Id);
+											renderPartialTransferTaskForm($Model3);
+											?>
+										
+										
+									  </div>
+									</div>
+								</div>
 								
-							  </div>
+								
+							
 							</div>
+							
+						
 						  </div>
+						  <div class="text-center">
+						  <a class="collapsed " data-toggle="collapse" data-parent="#accordion" href="#collapseTwo<?php echo $Model->Id ; ?>" aria-expanded="false" aria-controls="collapseTwo<?php echo $Model->Id ; ?>">
+  							<img src="img/left-color.png" />
+	  					  </a>
+						  </div>
+						  
+						</div>
+				
+			  </div>
 						
 						
 						
@@ -409,13 +545,7 @@ function Partial($partialToRender, $Model, $css_class)
 						<?php
 					}
 					?>
-					
-					
-					
-					
-				  </div>
-				</div>
-			  </div>
+				
 			
 
 
@@ -480,6 +610,12 @@ function Partial($partialToRender, $Model, $css_class)
 				?>
 			</div>
 			<div id="tasks" style="height: 375px; width: 1067px;overflow:scroll;">
+			
+			
+					
+			
+			
+			
 				<?php				
 					foreach($Model->Tasks as $task)
 					{
@@ -547,13 +683,71 @@ function renderPartialShareTaskPanel($Model)
 	// include_once("task_transferModel.php");
 	// $modell = new task_transferModel($Model->Id);
 	?>
-	<div class="task-assign-user-container" style="display:none;" ref="<?php echo $Model->Id ; ?>">
+	
+
+	
+	
+	
+	
+	<div class="task-assign-user-container" style="display:none;" ref="<?php echo $Model->Task->Id ; ?>">
 		<form action="task_edit.php" method="post">
-			<input type="hidden" value="<?php echo $Model->Id ; ?>" name="taskid" />
-			<input type="textbox" name="assiged-userid"/><input type="submit" value="Asignar" name="edit-task" />
-			<!-- <a name="task-assign-user" ><input type="button" value="Buscar usuarios" name="edit-task" /></a> -->
+			<input type="hidden" value="<?php echo $Model->Task->Id ; ?>" name="taskid" />
+			
+			<br />
+			<input readonly
+			 style="cursor:pointer;" class="form-control form-control-lg" placeholder="Buscar..."  name="assigned-userid"
+			 data-toggle="modal"  data-target="#exampleModal" 
+			data-whatever2="<?php echo $Model->Task->Name ; ?>"
+			data-whatever='
+			<?php
+				
+				
+				include_once("partial-usuarios_noasignadosModel.php");
+				$Model4 = new usuarios_noasignadosModel($Model->Task->Id);
+				if($Model4->Users != null)
+				{
+					if(count($Model4->Users) > 0 )
+					{
+						$contadorCandidatos = count($Model4->Users);
+						// foreach($Model4->Users as $candidato)
+							// {
+								// echo $candidato->Name . "(" . $candidato->Id  . ")";
+								// if($contadorCandidatos > 1)
+								// {
+									echo json_encode($Model4->Users);
+								// }
+								// $contadorCandidatos--;
+							// }
+					}
+				}
+				
+				
+				
+				
+			?>
+			' />
+			<input class="btn btn-success" type="submit" value="Asignar" disabled="disabled" name="edit-task" />
+			<input type="button" class="btn btn-secondary btn-share-cancel"  value="Cancelar" />
+			
+			
 		</form>
+		
+		
+            <?php
+			
+				include_once("partial-usuarios_asignadosModel.php");
+				$Model3 = new usuarios_asignadosModel($Model->Task->Id);
+				if($Model3->Users != null)
+				{
+					if(count($Model3->Users) > 0 )
+					{
+						
+						renderPartialUsuariosAsignados($Model3);
+					}
+				}
+			?>
 	</div>
+	
 	<?php
 }
 
@@ -565,13 +759,15 @@ function renderPartialTransferTaskForm($Model)
 	if(count($Model->Projects) > 2)
 	{
 		?>
-		<div class="task-transfer-container" ref="<?php echo $Model->Task->Id ; ?>">
+		
 			<form action="task_edit.php" method="post" >
 				<input type="hidden" value="<?php echo $Model->Task->Id ; ?>" name="taskid" />
 				<input type="hidden" value="transferir" name="transferir" />
 				
-				<select name="projectid" class="projectid">				
-					<option value="<?php echo $Model->Task->ProjectId ; ?>" >Seleccione Proyecto receptor y presione "Transferir"</option>
+				<select name="projectid" class="form-control form-control-lg projectid"
+				
+				>				
+					<option value="<?php echo $Model->Task->ProjectId ; ?>" >Seleccione un Proyecto...</option>
 					<?php
 					$assignedTasksProjectId = -1 ; 
 					foreach($Model->Projects as $Project)
@@ -581,16 +777,22 @@ function renderPartialTransferTaskForm($Model)
 							if( $Model->Task->ProjectId != $Project->Id )
 							{
 								?>
-								<option value="<?php echo $Project->Id ; ?>"><?php echo trim($Project->Name); echo $Model->Task->ProjectId == $Project->Id ? "(ACTUAL)" : "" ; ?></option>
+								<option value="<?php echo $Project->Id ; ?>">
+								<?php 
+								echo strlen($Project->Name) < 13 ? $Project->Name : substr(trim($Project->Name), 0, 10) . "..." ;  echo $Model->Task->ProjectId == $Project->Id ? "(ACTUAL)" : "" ; 
+								?>
+								</option>
 								<?php
 							}						
 						}					
 					}
 					?>
 				</select>
-				<input type="submit" value="Transferir" name="transferir" class="transferProject" />
+				<br />
+				<br />
+				<input class="btn btn-success" type="submit" value="Transferir" name="transferir" class="transferProject" />
 			</form>
-		</div>
+		
 	<?php
 	}
 	else
@@ -615,5 +817,49 @@ function getTransferTaskFormModel($TaskId)
 	
 }
 
+
+function renderPartialUsuariosAsignados($Model)
+{
+	?>	
+				
+				
+	<div class="card">
+        <div class="card-header" role="tab" id="headingThree">
+          <h5 class="mb-0">
+            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree<?php echo $Model->Task->Id ; ?>" aria-expanded="false" aria-controls="collapseThree<?php echo $Model->Task->Id ; ?>">
+			Asignado a:
+            </a>
+          </h5>
+        </div>
+        <div id="collapseThree<?php echo $Model->Task->Id ; ?>" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="card-body">
+		  
+			<ul>
+	
+				<?php
+					foreach($Model->Users as $User)
+					{
+						?>
+						
+						
+						
+						
+						
+						<li><?php echo $User->Id ; ?> - <b><?php echo $User->Name ; ?></b></li>
+						<?php
+					}
+					?>
+			</ul>
+			
+          </div>
+        </div>
+      </div>			
+				
+				
+	
+	
+
+	<?php
+}	
 
 ?>

@@ -74,15 +74,29 @@ else
 
     <!-- Page Heading/Breadcrumbs -->
 	<br />
-    <h1 class="mt-4 mb-3">PROYECTOS
-      <!--<small>Proyectos</small>-->
+    <h1 class="mt-4 mb-3 text-center">PROYECTOS
+      <small>
+	  
+	 </small>
     </h1>
 
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <a href="index.php">Inicio</a>
+        
       </li>
       <li class="breadcrumb-item active">Proyectos</li>
+	  <?php
+	  if($Model->User->Type != 2)
+	  {
+		  ?>
+		  <li class="breadcrumb-item" style="color: #007bff ; cursor:pointer;" id="add-project-button" >
+				
+				  [+]
+				
+			</li>
+		  <?php
+	  }
+	  ?>
     </ol>
 
     <div class="row" id="projectslist">
@@ -101,11 +115,7 @@ else
 		if($Model->User->Type != 2)
 		{
 			?>
-			<div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
-				<div class="card h-100">
-				  <img src="img/addproject-color.png" class="img-addproject" id="add-project-button" />
-				</div>
-			</div>
+			
 			<div style="display:none;" id="create-new-project-form" style="/*padding-top:15px;*/ margin-top: 15px; padding-left: 15px;  border: 1px solid black ; " class="create-new-project-form col-lg-3 col-md-4 col-sm-6 portfolio-item">
 					<h3>
 						Creando nuevo Proyecto
@@ -255,12 +265,15 @@ $(document).ready(function(){
 	$("#add-project-button").click(function(){		
 		$("#create-new-project-form").show();
 		$("#projectname").focus();
-		$(this).parent().parent().hide();
+		// $(this).parent().parent().hide();
+		// $(this).parent().hide();
+		$(this).hide();
 	});
 	$("#hide-project-button").click(function(){		
 		$("#create-new-project-form").hide();
-		$("#projectslist").append($("#add-project-button").parent().parent());
-		$("#add-project-button").parent().parent().show();
+		//$("#projectslist").append($("#add-project-button").parent().parent());
+		// $("#add-project-button").parent().show();
+		$("#add-project-button").show();
 	});
 	
 	$("#hide-task-form-button").click(function(){		

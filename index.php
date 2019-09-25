@@ -44,7 +44,7 @@ if(isset($_SESSION["User"]))
   <nav class="navbar navbar-light bg-light static-top">
     <div class="container">
       <a class="navbar-brand" href="#"><img src="img/logo.png"></a>
-      <a class="btn btn-primary" href="<?php echo "utils/auth/login4.php?appid=" . $appid?>">Entrar</a>
+      <a class="btn btn-primary" href="login.php">Entrar</a>
     </div>
   </nav>
 

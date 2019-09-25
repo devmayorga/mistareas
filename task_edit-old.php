@@ -103,11 +103,11 @@ else
 				}
 			}
 			
-			if(isset($_POST["assigned-userid"]))
+			if(isset($_POST["assiged-userid"]))
 			{				
 				$Model = new task_editModel($_POST["taskid"]);
 				
-				$assigneduserid = $Model->assignTask($_POST["assigned-userid"]);
+				$assigneduserid = $Model->assignTask($_POST["assiged-userid"]);
 				if($assigneduserid)
 				{
 					$redirectLocation = "Location:todolist.php?p=" . $Model->Task->ProjectId; 
