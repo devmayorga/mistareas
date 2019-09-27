@@ -230,8 +230,24 @@ function Partial($partialToRender, $Model, $css_class)
 				  
 					
 					<ul class="navbar-nav ml-auto">
-						
-					  <li>
+						<li class="nav-item" >
+						  <a class="nav-link" href="user_connections.php">Conexiones</a>
+						  </small>
+					  </li>
+					  <?php
+					  if(
+						$Model->Type == 1
+						&& $Model->HasTeamCreate() 
+						)
+						  {
+							  /*
+							  ?>
+							  <li class="nav-item" ><a  class="nav-link" href="teams.php">Equipos</a></li>
+							  <?php
+							  */
+						  }
+					  ?>
+					  <li class="nav-item" >
 					  <small >Bienvenido <b><?php echo $Model->Name ; ?></b> 
 						<br>Id de usuario: [<?php echo $Model->Id ; ?>] 
 						<br> Tipo de cuenta: <?php echo $Model->Type == 2 ? "Alumno" : "Maestro" ; ?> 
@@ -704,17 +720,35 @@ function renderPartialShareTaskPanel($Model)
 				
 				include_once("partial-usuarios_noasignadosModel.php");
 				$Model4 = new usuarios_noasignadosModel($Model->Task->Id);
+				$CandidatosValidados = array();
 				if($Model4->Users != null)
 				{
 					if(count($Model4->Users) > 0 )
 					{
-						$contadorCandidatos = count($Model4->Users);
+						foreach($Model4->Users as $candidatoNoVerificado)
+						{
+							if($candidatoNoVerificado->Friends !== null)
+							{
+								foreach($candidatoNoVerificado->Friends as $amigoPotencialDeCandidato)
+								{
+									if($amigoPotencialDeCandidato->Id == $Model->TaskOwner)
+									{
+										$CandidatosValidados[] = $candidatoNoVerificado ;
+										break ; 
+									}
+								}
+							}
+							
+						}
+						
+						
+						$contadorCandidatos = count($CandidatosValidados);
 						// foreach($Model4->Users as $candidato)
 							// {
 								// echo $candidato->Name . "(" . $candidato->Id  . ")";
 								// if($contadorCandidatos > 1)
 								// {
-									echo json_encode($Model4->Users);
+									echo json_encode($CandidatosValidados);
 								// }
 								// $contadorCandidatos--;
 							// }
@@ -860,6 +894,113 @@ function renderPartialUsuariosAsignados($Model)
 	
 
 	<?php
-}	
+}
+
+
+
+
+
+function renderPartialUserFriends($User)
+{
+	?>
+	
+	
+	<ul>
+	<?php
+	if($User->Friends != null)
+	{
+		foreach($User->Friends as $friend)
+		{
+			?>
+			<li><?php echo "[" . $friend->Id . "] " .$friend->Name ; ?>
+			
+			<?php
+			renderConectUsersButton($User, $friend, "desconectar", "Desconectar", "danger");
+			?>
+			</li>	
+			<?php
+		}
+	}
+	?>
+	</ul>
+	
+	<?php
+}
+
+
+function renderPartialUserNotFriends($User)
+{
+	?>
+	
+	<ul>
+	<?php
+	foreach($User->NotFriends as $friend)
+	{
+		$match = false ; 
+		?>
+		<br />
+		<li><?php echo "[" . $friend->Id . "] <b>" . $friend->Name . "</b>"; ?>
+		
+		<?php
+			
+			if($User->getConnectionStatus($friend->Id) == "enviada")
+					{
+						$match = true ;
+						?>
+						(Solicitud enviada)
+						<?php
+						renderConectUsersButton($User, $friend, "desconectar", "Cancelar la solicitud", "danger");
+					}
+					elseif($User->getConnectionStatus($friend->Id) == "recibida")
+					{
+						?>
+						(Este usuario te ha agregado)  
+						<?php
+						renderConectUsersButton($friend, $User, "aceptar", "Aceptar", "success");
+						renderConectUsersButton($friend, $User, "desconectar", "Ignorar solicitud", "danger");
+					}
+					else
+					{
+						renderConectUsersButton($User, $friend, "solicitar", "Conectar", "primary");
+					}
+			
+		?>
+		</li>
+		<?php
+	}
+	?>
+	</ul>
+	
+	<?php
+}
+
+function renderConectUsersButton($user1, $user2, $action, $label, $css_class)
+{
+	?>
+	<a href="user_connect.php?action=<?php echo $action ; ?>&userid1=<?php echo $user1->Id ; ?>=&userid2=<?php echo $user2->Id?>" class="btn btn-<?php echo $css_class?> " /><?php echo $label ; ?></a>
+	<?php
+}
+
+
+
+function renderPartialUserRequests($User)
+{
+	?>
+	<ul>
+	<?php
+	foreach($User->NotFriends as $friend)
+	{
+		?>
+		<li><?php echo "[" . $friend->Id . "] " .$friend->Name ; ?>
+		<form action="user_connections.php" method="post">
+		</form>
+		</li>
+		<?php
+	}
+	?>
+	</ul>
+	<?php
+}
+
 
 ?>

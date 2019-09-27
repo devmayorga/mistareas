@@ -76,6 +76,7 @@ class Dal
 			try
 			{
 				$user->Projects=$this->getUserProjects($user->Id);
+				//$user->Features=$this->getUserFeatures($user->Id);
 			}
 			catch(Exception $e)
 			{
@@ -391,7 +392,7 @@ class Dal
 			// $sql = "insert into r_task_user (taskid, userid) values ('". $taskid  ."', '". $userid ."')";
 			$sql = " CALL `sp_getTaskDocuments`('". $taskid ."');";
 			// die($sql);
-			$res = mysqli_query($this->con, $sql);
+			$res = mysqli_query($this->con, $sql) or die ("Error in method ". $method ."... MySQL dice: " . mysqli_error($this->con) );
 			mysqli_commit($this->con);
 			while($row = mysqli_fetch_assoc($res))
 			{
@@ -484,7 +485,256 @@ class Dal
 	}
 	
 	
+	// 25-09-2019
+	// JM - Created for Ivan to test the Plattform and isolate his users from mines
+	function getUserFeatures($userid)
+	{
+		$Features = null ;
+		include_once("Feature.php");
+		$method = "Dal.getUserFeatures";
+		try
+		{
+			mysqli_begin_transaction($this->con);
+			
+			$sql = " CALL `sp_getUserFeatures`('". $userid ."');";
+			//die($sql);
+			$res = mysqli_query($this->con,$sql) or die ("Error in method ". $method ."... MySQL dice: " . mysqli_error($this->con) );
+			
+			mysqli_commit($this->con);
+			while($row = mysqli_fetch_assoc($res))
+			{
+				$Feature = new Feature(
+					 $row["featureid"]
+					 , $row["name"]
+					);
+				$Features[] = $Feature ; 
+				
+			}
+			return $Features ; 
+		}
+		catch (Exception $e) 
+		{
+			mysqli_rollback($this->con);
+			$Features[] = new Feature();
+		}
+		finally
+		{
+			return $Features ;
+		}
+		
+	}
 	
+	
+	// 25-09-2019
+	// JM - Created for Ivan to test the Plattform and isolate his users from mines
+	function getUserFriends($userid)
+	{
+		$Friends = null ;
+		include_once("User.php");
+		$method = "Dal.getUserFriends";
+		try
+		{
+			mysqli_begin_transaction($this->con);
+			
+			$sql = " CALL `sp_getUserFriends`('". $userid ."');";
+			//die($sql);
+			$res = mysqli_query($this->con,$sql) or die ("Error in method ". $method ."... MySQL dice: " . mysqli_error($this->con) );
+			
+			mysqli_commit($this->con);
+			while($row = mysqli_fetch_assoc($res))
+			{
+				$Friend = new User(
+					 $row["friendid"]
+					 , $row["name"]
+					);
+				$Friends[] = $Friend ; 
+				
+			}
+			return $Friends ; 
+		}
+		catch (Exception $e) 
+		{
+			mysqli_rollback($this->con);
+			$Friends[] = new User();
+		}
+		finally
+		{
+			return $Friends ;
+		}
+		
+	} // fin getUserFriends
+	
+	
+	
+	// 25-09-2019
+	// JM - Created for Ivan to test the Plattform and isolate his users from mines
+	function getUserNotFriends($userid)
+	{
+		$Friends = null ;
+		include_once("User.php");
+		$method = "Dal.getUserNotFriends";
+		try
+		{
+			mysqli_begin_transaction($this->con);
+			
+			$sql = " CALL `sp_getUserNotFriends`('". $userid ."');";
+			//die($sql);
+			$res = mysqli_query($this->con,$sql) or die ("Error in method ". $method ."... MySQL dice: " . mysqli_error($this->con) );
+			
+			mysqli_commit($this->con);
+			while($row = mysqli_fetch_assoc($res))
+			{
+				$Friend = new User(
+					 $row["friendid"]
+					 , $row["name"]
+					);
+				$Friends[] = $Friend ; 
+				
+			}
+			return $Friends ; 
+		}
+		catch (Exception $e) 
+		{
+			mysqli_rollback($this->con);
+			$Friends[] = new User();
+		}
+		finally
+		{
+			return $Friends ;
+		}
+		
+	} // fin getUserNotFriends
+	
+	
+	// 25-09-2019
+	// JM - Created for Ivan to test the Plattform and isolate his users from mines
+	function getUserSolicitudes($userid, $tipo)
+	{
+		$Friends = null ;
+		include_once("User.php");
+		$method = "Dal.getUserSolicitudes";
+		try
+		{
+			mysqli_begin_transaction($this->con);
+			if($tipo !== "Enviadas" && $tipo != "Recibidas")
+			{
+				throw new Exception("InvalidRequestException"); 
+			}
+			$sql = " CALL `sp_getUserSolicitudes". $tipo ."`('". $userid ."');";
+			
+			
+			//die($sql);
+			$res = mysqli_query($this->con,$sql) or die ("Error in method ". $method ."... MySQL dice: " . mysqli_error($this->con) );
+			
+			mysqli_commit($this->con);
+			while($row = mysqli_fetch_assoc($res))
+			{
+				$Friend = new User(
+					 $row["friendid"]
+					 , $row["name"]
+					);
+				$Friends[] = $Friend ; 
+				
+			}
+			return $Friends ; 
+		}
+		catch (Exception $e) 
+		{
+			mysqli_rollback($this->con);
+			$Friends[] = new User();
+		}
+		finally
+		{
+			return $Friends ;
+		}
+		
+	} // fin getUserSolicitudes// 25-09-2019
+	// JM - Created for Ivan to test the Plattform and isolate his users from mines
+	function editarConexion($userid1, $userid2, $action)
+	{
+		$retval = true ; 
+		
+		$method = "Dal.editarConexion";
+		
+		
+		switch($action)
+		{
+			case "aceptar":
+				$sp = "sp_acceptConnection" ;
+				$retval = "aceptado" ;
+			break;
+			case "desconectar":
+				$sp = "sp_removeConnection" ;
+				$retval = "desconectado" ;
+			break;
+			case "solicitar":
+				$sp = "sp_requestConnection" ;
+				$retval = "solicitado" ;
+			break;
+			default:
+				throw new Exception ("InvalidRequestException") ;
+		}
+		
+		
+		try
+		{
+			mysqli_begin_transaction($this->con);
+			
+			$sql = " CALL `". $sp ."`('". $userid1 ."', '". $userid2 ."');";
+			
+			
+			//die($sql);
+			$res = mysqli_query($this->con,$sql) or die ("Error in method ". $method ."... MySQL dice: " . mysqli_error($this->con) );
+			
+			mysqli_commit($this->con);
+			
+
+		}
+		catch (Exception $e) 
+		{
+			mysqli_rollback($this->con);
+			$retval = false ; 
+		}
+		finally
+		{
+			
+		}
+		return $retval ;
+		
+	} // fin editarConexion
+	
+	function getConnectionStatus($userid1, $userid2)
+	{
+		$Status = null ;
+		
+		$method = "Dal.getConnectionStatus";
+		try
+		{
+			mysqli_begin_transaction($this->con);
+			
+			$sql = " CALL `sp_getConnectionStatus`('". $userid1 ."', '". $userid2 ."');";
+			//die($sql);
+			$res = mysqli_query($this->con,$sql) or die ("Error in method ". $method ."... MySQL dice: " . mysqli_error($this->con) );
+			
+			mysqli_commit($this->con);
+			while($row = mysqli_fetch_assoc($res))
+			{
+				
+				$Status = $row["statusConnection"] ; 
+				
+			}
+			
+		}
+		catch (Exception $e) 
+		{
+			mysqli_rollback($this->con);
+			$Status = null ;
+		}
+		finally
+		{
+			return $Status ;
+		}
+	}
 	
 	
 

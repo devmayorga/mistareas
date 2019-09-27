@@ -12,13 +12,31 @@ class todolistModel{
 		try
 		{
 		$this->User = $this->Dal->GetUser($p_userid);
+		$this->Dal->Close();
+		$this->Dal = new Dal();
+		$this->User->Features = $this->Dal->getUserFeatures($this->User->Id);
+		$this->Dal->Close();
+		$this->Dal = new Dal();
+		$this->User->Friends = $this->Dal->getUserFriends($this->User->Id);
+		$this->Dal->Close();
+		$this->Dal = new Dal();
+		$this->User->NotFriends = $this->Dal->getUserNotFriends($this->User->Id);
+		$this->Dal->Close();
+		$this->Dal = new Dal();
+		$this->User->SolicitudesEnviadas = $this->Dal->getUserSolicitudes($this->User->Id, "Enviadas");
+		$this->Dal->Close();
+		$this->Dal = new Dal();
+		$this->User->SolicitudesRecibidas = $this->Dal->getUserSolicitudes($this->User->Id, "Recibidas");
 		}
 		catch (Exception $e)
 		{
 			echo "todolistModel Catched the Exception";
 		}
+		finally
+		{
+			$this->Dal->Close();
+		}
 		
-		$this->Dal->Close();
 	}
 }
 ?>

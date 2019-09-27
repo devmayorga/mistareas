@@ -14,6 +14,13 @@ class usuarios_noasignadosModel implements JsonSerializable{
 		{
 			$this->Task = $this->Dal->getTask($p_taskid);
 			$this->Users = $this->Dal->getUnassignedUsers($p_taskid);
+			$this->Dal->Close();
+			foreach($this->Users as $user)
+			{
+				$this->Dal = new Dal();
+				$user->Friends = $this->Dal->getUserFriends($user->Id);
+				$this->Dal->Close();
+			}
 		}
 		catch (Exception $e)
 		{

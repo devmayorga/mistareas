@@ -1,0 +1,64 @@
+AppFeatures
+Id Name
+1   CreateTeam
+2	CreateUser
+	
+	
+r_user_feature
+relationId
+UserId
+featureId
+rowdate
+enddate
+
+
+Team
+Id
+Name
+RowDate
+CreatedByUserId
+  -- Trigger when Inserting here, a row must be added to r_team_users with the OwnerUserId as teacher
+
+r_team_users
+relationId
+TeamId
+UserId
+RoleId (1 maestro, 2 alumno)
+
+
+
+
+SPROCS
+team_create(creador_userid, name)
+team_getTeamsOwnedBy(creador_userid)
+team_getTeamsForUser(Userid)
+team_getAlumnosForTeam(TeamId)
+team_getMaestrosForTeam(TeamId)
+team_subscribeAs(userid : 1 = maestro, 2 = alumno)
+
+sp_getUserFeatures(UserId)
+sp_AddFeatureFor(featureid, userid)
+sp_getUserFriends (p_userid)
+
+sp_getSolicitudesEnviadas(userid)
+sp_getSolicitudesRecibidas(userid)
+
+
+
+
+
+--------------------- FRIENDS ---------------------
+
+
+
+r_user_users
+relationId
+userid1
+userid2
+rowdate
+RoleId (1 maestro, 2 alumno)
+
+
+
+
+

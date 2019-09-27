@@ -158,6 +158,9 @@ else
 		  <div class="modal-body">
 			<p>
 			</p>
+			<div>
+			Nota: Si no aparece el usuario que usted desea, primero verifique que este entre sus conexiones <a href="user_connections.php">Aqui</a>
+			</div>
 		  </div>
 		  <div class="modal-footer">
 			<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
