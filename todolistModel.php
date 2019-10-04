@@ -11,7 +11,7 @@ class todolistModel{
 		$this->Dal = new Dal();
 		try
 		{
-		$this->User = $this->Dal->GetUser($p_userid);
+		$this->User = $this->Dal->getUser($p_userid);
 		$this->Dal->Close();
 		$this->Dal = new Dal();
 		$this->User->Features = $this->Dal->getUserFeatures($this->User->Id);

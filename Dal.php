@@ -108,8 +108,10 @@ class Dal
 			$sql = " CALL `sp_upgradeUser`('". $userid ."', '". $upgradeCode ."');";
 			// die($sql);
 			$res = mysqli_query($this->con, $sql);
+			$row = mysqli_fetch_assoc($res);
+			$upgradeStatus = $row["UpgradeSuccess"];
 			mysqli_commit($this->con);
-			return true ;
+			return $upgradeStatus > 0  ;
 		}
 		catch (Exception $e) 
 		{
@@ -735,6 +737,67 @@ class Dal
 			return $Status ;
 		}
 	}
+	
+	function userHasAssignedTask($userid1, $p_taskid)
+	{
+		$Status = false ;
+		
+		$method = "Dal.getConnectionStatus";
+		try
+		{
+			mysqli_begin_transaction($this->con);
+			
+			$sql = " select `fn_UserHasTask`('". $userid1 ."', '". $p_taskid ."') as UserHasTask;";
+			//die($sql);
+			$res = mysqli_query($this->con,$sql) or die ("Error in method ". $method ."... MySQL dice: " . mysqli_error($this->con) );
+			
+			mysqli_commit($this->con);
+			$row = mysqli_fetch_assoc($res);
+			
+				
+				if ( $row["UserHasTask"] > 0 )
+				{
+					$Status = true ;
+				}
+				
+			
+			
+		}
+		catch (Exception $e) 
+		{
+			mysqli_rollback($this->con);
+			$Status = false ;
+		}
+		finally
+		{
+			return $Status ;
+		}
+	}
+	
+	
+	
+	// - - - > JM : Added thi function
+	function unassignTask($taskid, $userid)
+	{
+		$method = "Dal.unassignTask";
+		try
+		{
+			mysqli_begin_transaction($this->con);
+			// $sql = "insert into r_task_user (taskid, userid) values ('". $taskid  ."', '". $userid ."')";
+			$sql = " CALL `sp_desasignarTarea`(". $taskid .", ". $userid .");" or die ("Error in method ". $method ."... MySQL dice: " . mysqli_error($this->con) );
+			$res = mysqli_query($this->con, $sql);
+			mysqli_commit($this->con);
+			return true ;
+		}
+		catch (Exception $e) 
+		{
+			mysqli_rollback($this->con);
+			return false ;
+		}
+	}
+	
+	
+	
 	
 	
 

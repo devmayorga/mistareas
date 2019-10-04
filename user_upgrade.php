@@ -1,41 +1,418 @@
 <?php
+include_once("User.php");
+include_once("todolistModel.php");
+include_once("Partials.php");
 session_start();
-include_once("user_upgradeModel.php");
-if(!empty($_GET["uid"])){
-	$Model = new user_upgradeModel($_GET["uid"]);
-	?>
-	Escriba su código de Actualización
-	<form action="user_upgrade.php" method="post">
-		<input type="hidden" value="<?php echo $Model->User->Id ; ?>" name="uid" />
-		<input type="text" name="upgradeCode" value="" />
-		<input type="submit" value="Actualizar" name="upgrade-user" />
-		<a href="home.php"><input type="button" value="Cancelar" name="cancelar" /></a>
-	</form>
-	<?php
+
+//
+if(!isset($_SESSION["User"]))
+{	
+	$userid = 0 ; 
 }
 else
-{	
+{
+	$userid = $_SESSION["User"]["id"];
+}
 
-	if(isset($_POST["uid"]))
+
+try{
+$Model = new todolistModel($userid);
+/*A estas alturas del partido. Si el Usuario no tiene Id es porque caducó la sesion.*/
+if(strlen($Model->User->Name) < 1)
+{
+  ?>
+  <script language="javascript">
+  window.location.href="sesionExpirada.php";
+  </script>
+  <?php
+}
+}
+catch(Exception $e) {
+	echo "AS";
+}
+
+
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>mistareas.com.mx</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="css/modern-business.css" rel="stylesheet">
+
+
+
+
+
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+	  <?php
+	  Partial("partial-navigator", $Model->User , "" ) ;
+	  ?>
+  
+  
+  <!-- Page Content -->
+  <div class="container">
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+    
+	<?php
+	include_once("user_upgrade-old.php");
+	?>
+	
+	<br>
+	<br>
+	<br>
+	<br>
+
+  <?php
+  Partial("partial-footer", null, "");
+  ?>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+
+	<script type="text/javascript" >
+
+function activateTaskItemActions()
 	{
-		if(isset($_POST["upgradeCode"]) )
-		{ 
-			$Model = new user_upgradeModel($_POST["uid"]);
-			$userUpgraded = $Model->upgradeUser($_POST["upgradeCode"]);
-			if($userUpgraded)
+		
+		
+		
+		/*** share button********/
+	
+		$(".img-share").click(function(){
+			assignForm = $(this).parent().parent().find('.task-assign-user-container') ;
+			// Checks css for display:[none|block], ignores visibility:[true|false]
+			if(assignForm.is(":visible"))
 			{
-				$redirectLocation = "Location:home.php";
-				header($redirectLocation);
+				assignForm.hide();
 			}
 			else
 			{
-				?>
-				CUENTA NO ACTUALIZADA !
-				<br />
-				<a href="index.php">Inicio</a>
-				<?php
+			// The same works with hidden
+			assignForm.is(":hidden");
+			$(assignForm).show();
 			}
-		}
+		});
+		/************************/
+		
+		/*** cancel share button********/
+		$(".btn-share-cancel").click(function(){
+				$(this).parent().find("input[name='assigned-userid']").val("");
+				$(this).parent().find("input[type='submit']").prop("disabled", "disabled");
+				$(this).parent().parent().parent().find(".img-share").click();
+		});
+		/************************/
+		
+		
+		
+		/*** completed checkbox */
+		$('.chk_completed').click(function(){
+			
+			var id = $(this).parent().attr('ref') ;
+			var done = 1 ; 
+			var parent = $(this).parent();
+			$(this).hide();
+			/*if(done == 1)
+			{
+				$(this).parent().parent().attr("style", "background-color:#DCF0F7;");
+			}
+			else
+			{
+				$(this).parent().parent().attr("style", "background-color:white;");
+			}*/
+			//alert("id: " + id + "done" + done);
+			$.ajax({
+				type: "POST",
+				url: "task_update.php",
+				data: "id=" +id + "&done="+ done ,
+				success: function(msg){
+					//alert("tarea actualizada");
+					parent.append('<img  src="img/flag-color.png" width="64" /><a href="task_undo.php?t='+ id +'"><img  src="img/undo.png" width="24" /></a>');
+				}
+			});
+		});
+		/************************/
+		
+		$('.img-action-left').hover(function(){
+			$(this).attr('src','img/left-black.png');
+		});
+		$('.img-action-left').mouseout(function(){
+			$(this).attr('src','img/left-color.png');
+		});
+		
+		$('.img-action-left').click(function(){		
+			$(this).parent().parent().find('.tasks-list-item-actions').show();
+			
+			var rightArrow = $(this).parent().parent().find('.img-action-right');
+			rightArrow.show();
+			$(this).hide();
+			
+			
+			$('.img-action-right').hover(function(){
+				$(this).attr('src','img/right-black.png');
+				
+			});
+			$('.img-action-right').mouseout(function(){
+			$(this).attr('src','img/right-color.png');
+			});
+			
+			
+			
+			rightArrow.click(function(){		
+				$(this).parent().parent().find('.tasks-list-item-actions').hide();
+				var leftArrow = $(this).parent().parent().find('.img-action-left');
+				leftArrow.show();
+				$(this).hide();			
+			});
+			
+			
+			
+		});
 	}
-}
-?>
+	
+
+$(document).ready(function(){
+	
+	
+	$('#exampleModal').on('show.bs.modal', function (event) {
+	  var button = $(event.relatedTarget); // Button that triggered the modal
+	  var usuariosAsignables ;
+	  // alert("*" + button.data('whatever').trim().length + "*");
+	  if(  button.data('whatever').trim().length < 1 )
+	  {
+		  usuariosAsignables = {};
+	  }
+	  else
+	  {
+		  usuariosAsignables = JSON.parse(button.data('whatever')); // Extract info from data-* attributes
+	  }
+	  
+	  var tareaNombre = button.data('whatever2') ;// Extract info from data-* attributes
+	  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+	  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+	  var modal = $(this);
+	  modal.find('.modal-body p').empty();
+	  modal.find('.modal-title').text('Seleccione el Usuario a asociar con la Tarea ' + tareaNombre);
+	  modal.find('.modal-body p').text("Usuarios disponibles: ");
+	  // modal.find('.modal-body p').append("<ul></ul>");
+	  $.each(usuariosAsignables, function(key, item){
+		modal.find('.modal-body p ').append("<br /><button data-dismiss='modal' class='btn btn-primary candidato' value='"+ item.Id +"'>"+ item.Id + "-" + item.Name +"</button>");  
+	  });
+	  modal.find(".candidato").click(function(){
+		  // alert($(this).val());
+		  button.parent().find("input[name='assigned-userid']").val($(this).val());
+		  button.parent().find("input[type='submit']").prop("disabled","");
+	  });
+	  
+	  
+	})
+	
+	
+	
+	
+	$('#add-project-button').hide();
+	$('#description').focus();
+	
+	
+	/************** Task Item actions *******************/
+	
+		 activateTaskItemActions();
+	
+	
+	/****************************************************/
+	
+	
+	
+	
+	/*** transfer button********/
+	
+	$(".img-transfer").click(function(){
+		transferForm = $(this).parent().parent().find('.task-transfer-container') ;
+		// Checks css for display:[none|block], ignores visibility:[true|false]
+		if(transferForm.is(":visible"))
+		{
+			transferForm.hide();
+		}
+		else
+		{
+		// The same works with hidden
+		transferForm.is(":hidden");
+		$(transferForm).show();
+		}
+	});
+	/************************/
+	
+	<?php
+	$actions = ["delete", "edit", "add","addproject", "hide", "logout", "chrono", "aula", "menuproject", "home", "pdf", "share", "up", "transfer"];
+	foreach($actions as $action)
+	{
+		?>
+		$('.img-<?php echo $action ;?>').hover(function(){
+		$(this).attr('src','img/<?php echo $action ;?>-black.png');
+		});
+		$('.img-<?php echo $action ;?>').mouseout(function(){
+			$(this).attr('src','img/<?php echo $action ;?>-color.png');
+		});
+		<?php
+	}
+	?>
+	
+	
+	
+	
+	$("#img-project-menu").click(function(){
+		$(this).parent().parent().find("#projectslist").show();
+		$("#add-project-button").show();
+		$(this).hide();
+	});
+	
+	$("#project-menu-hide").click(function(){
+		$(this).parent().hide();
+		$("#add-project-button").hide();
+		$(this).parent().parent().find("#img-project-menu").show();		
+	});
+	
+	$("#add-project-button").click(function(){		
+		$("#create-new-project-form").show();
+		$(this).hide();
+	});
+	$("#hide-project-button").click(function(){		
+		$("#create-new-project-form").hide();
+		$("#add-project-button").show();
+	});
+	
+	$("#hide-task-form-button").click(function(){		
+		$("#task-add-form").hide();
+		$("#task-add-button").show();
+	});
+	
+	$("#task-add-button").click(function(){		
+		$("#task-add-form").show();
+		$("#description").focus();
+		$(this).hide();
+	});
+
+	
+	
+	$('.transferProject').click(function(){
+		var id = $(this).parent().parent().attr('ref') ;
+		var newProjectId = $(this).parent().find('.projectslist').find(":selected").val();
+		var tareaTransferida = $(this).parent().parent().parent().parent();
+		// alert(tareaTransferida.html());
+		$.ajax({
+			type: "post",
+			url: "task_edit.php",
+			data: "transferir=transferir&taskid=" +id + "&projectid="+ newProjectId ,
+			success: function(msg){
+				tareaTransferida.html(msg);
+				
+			}
+		});
+	});
+	
+	
+
+	$('#add').click(function(){
+		var description = $('#description').val() ;
+		var done = $('#done').prop('checked') ? 1 : 0 ;
+		//alert($("#done").prop("checked"));
+		var projectid = $('#ddl_projectid').val() ;
+		
+		if( ! description )
+		{
+			alert ("Pon una description!");
+			$('#description').focus();
+			return ;
+		}
+		$.ajax({
+			async: false,
+			type: "POST",
+			url: "task_add.php",
+			data: "description=" +description + "&done="+ done  + "&projectid=" + projectid,
+			success: function(msg){
+				
+				$('#description').val('');
+				$('#done').attr('checked', false);
+				
+				$('#accordion').append(msg);
+				/****
+				$('tr:last').find('.chk_completed').click(function(){
+					var id = $(this).parent().parent().attr('ref') ;
+					var done = $(this).attr('checked') ? "1" : "0" ;
+					$.ajax({
+						type: "POST",
+						url: "task_update.php",
+						data: "id=" +id + "&done="+ done ,
+						success: function(msg){
+							alert(msg);
+						}
+					});
+					
+				});
+				****/
+				//alert("activar funciones de items");
+				activateTaskItemActions();
+			}
+		});
+		
+	});
+	
+	$('#addproject').click(function(){
+		var name = $('#projectname').val() ;
+		
+		if( ! name )
+		{
+			alert ("Pon un nombre de projecto!");
+			$('#projectname').focus();
+			return ;
+		}
+		//$(this).parent().parent().parent().hide();
+		$('#create-new-project-form').hide();
+		$.ajax({
+			async: false,
+			type: "POST",
+			url: "project_add.php",
+			data: "name=" +name  ,
+			success: function(msg){
+				$('#projectname').val('');				
+				//$('#projectslist').append(msg);
+				// Begin test case [ 1 ] : Exist a childElement --> All working correctly
+				var sp2 = $("#add-project-button");
+				$('#projectslist').insertBefore(msg, sp2);
+			}
+		});
+		
+	});
+
+});
+
+</script>
+
+
+
+</body>
+
+</html>

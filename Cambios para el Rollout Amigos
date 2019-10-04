@@ -1,3 +1,8 @@
+
+added fn_UserHasTask
+modified sp_upgradeUser
+
+
 AppFeatures
 Id Name
 1   CreateTeam

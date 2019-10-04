@@ -210,6 +210,26 @@ function activateTaskItemActions()
 		
 		
 		
+		/*** unshare button********/
+		$('.task-unassign').click(function(){
+			var usuarioDesasignado = $(this);
+			var usuario  = $(this).attr("ref1");
+			var taskid  = $(this).attr("ref2");
+			var dataString = "edit-task=1&task-action=unassign&taskid=" + taskid + "&userid="+ usuario ;
+			// alert(dataString);
+			$.ajax({
+				type: "POST",
+				url: "task_edit.php",
+				data: dataString ,
+				success: function(msg){
+					alert(msg + ". Para poderlo asignar nuevamente debe refrescar la página.");
+					usuarioDesasignado.parent().remove();
+					//parent.append('<img  src="img/flag-color.png" width="64" /><a href="task_undo.php?t='+ id +'"><img  src="img/undo.png" width="24" /></a>');
+				}
+			});
+		});
+		/************************/
+		
 		/*** share button********/
 	
 		$(".img-share").click(function(){

@@ -230,10 +230,36 @@ function Partial($partialToRender, $Model, $css_class)
 				  
 					
 					<ul class="navbar-nav ml-auto">
+						
+						<?php
+							if( $Model->HasUserCreate() )
+							{
+								?>
+								<li class="nav-item" >
+								  <a class="nav-link" href="user_create.php">Crear Usuario</a>
+								</li>
+								<?php
+							}
+						?>
+						
+						<?php
+							if( $Model->Type==2 )
+							{
+								?>
+								<li class="nav-item" >
+								  <a class="nav-link" href="user_upgrade.php?uid=<?php echo $Model->Id ; ?>">ACTIVAR CUENTA PREMIUM</a>
+								</li>
+								<?php
+							}
+						?>
+						
+						
 						<li class="nav-item" >
 						  <a class="nav-link" href="user_connections.php">Conexiones</a>
-						  </small>
-					  </li>
+						</li>
+						<li class="nav-item" >
+						  <a class="nav-link" href="home.php">Proyectos</a>
+						</li>
 					  <?php
 					  if(
 						$Model->Type == 1
@@ -725,21 +751,23 @@ function renderPartialShareTaskPanel($Model)
 				{
 					if(count($Model4->Users) > 0 )
 					{
-						foreach($Model4->Users as $candidatoNoVerificado)
-						{
-							if($candidatoNoVerificado->Friends !== null)
-							{
-								foreach($candidatoNoVerificado->Friends as $amigoPotencialDeCandidato)
-								{
-									if($amigoPotencialDeCandidato->Id == $Model->TaskOwner)
-									{
-										$CandidatosValidados[] = $candidatoNoVerificado ;
-										break ; 
-									}
-								}
-							}
+						
+						$CandidatosValidados = $Model4->Users ;
+						// foreach($Model4->Users as $candidatoNoVerificado)
+						// {
+							// if($candidatoNoVerificado->Friends !== null)
+							// {
+								// foreach($candidatoNoVerificado->Friends as $amigoPotencialDeCandidato)
+								// {
+									// if($amigoPotencialDeCandidato->Id == $Model->TaskOwner)
+									// {
+										// $CandidatosValidados[] = $candidatoNoVerificado ;
+										// break ; 
+									// }
+								// }
+							// }
 							
-						}
+						// }
 						
 						
 						$contadorCandidatos = count($CandidatosValidados);
@@ -874,12 +902,7 @@ function renderPartialUsuariosAsignados($Model)
 					foreach($Model->Users as $User)
 					{
 						?>
-						
-						
-						
-						
-						
-						<li><?php echo $User->Id ; ?> - <b><?php echo $User->Name ; ?></b></li>
+						<li><?php echo $User->Id ; ?> - <b><?php echo $User->Name ; ?></b><span class="btn-warning task-unassign" ref1="<?php echo $User->Id ; ?>" ref2="<?php echo $Model->Task->Id ; ?>" style="cursor:pointer;">[X]</span></li>
 						<?php
 					}
 					?>

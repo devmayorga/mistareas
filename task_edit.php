@@ -121,6 +121,33 @@ else
 				}
 			}
 			
+			if(isset($_POST["task-action"]))
+			{	
+
+				if($_POST["task-action"] == "unassign")
+				{
+					
+					$Model = new task_editModel($_POST["taskid"]);
+				
+					$unassigned = $Model->unassignTask($_POST["userid"]);
+					if($unassigned)
+					{
+						?>
+						Tarea [<?php echo $Model->Task->Name ; ?>] removido exitosamente del user [<?php echo $_POST["userid"] ; ?>] !
+						<?php
+						
+					}
+					else
+					{
+						?>
+						TAREA <?php echo $Model->Task->Name ; ?> NO MODIFICADO !
+						<?php
+					}
+					
+				}
+				
+			}
+			
 		}
 		
 		

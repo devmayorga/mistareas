@@ -19,12 +19,12 @@ class User
     function __construct($p_id = 0, $p_name="")
     {
 		include_once("Dal.php");
-		$this->Dal = new Dal();
+		// $this->Dal = new Dal();
         $this->Id = $p_id ;
 		$this->Name = $p_name ;
 		try
 		{
-			$this->Projects = $this->Dal->getUserProjects($this->Id);		
+			// $this->Projects = $this->Dal->getUserProjects($this->Id);		
 			//$this->Features = $this->Dal->getUserFeatures($p_id);		
 		}
 		catch(Exception $e){
@@ -53,6 +53,19 @@ class User
 	{
 		$this->Dal = new Dal();
 		$regreso =  $this->Dal->getConnectionStatus($this->Id , $user2);
+		$this->Dal->Close();
+		return $regreso ;
+	}
+	
+	function HasUserCreate()
+	{
+		return $this->Type == 1 ;
+	}
+	
+	function hasAssignedTask($p_taskid)
+	{
+		$this->Dal = new Dal();
+		$regreso =  $this->Dal->userHasAssignedTask($this->Id , $p_taskid);
 		$this->Dal->Close();
 		return $regreso ;
 	}

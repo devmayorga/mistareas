@@ -24,5 +24,13 @@ class task_editModel{
 		$this->Dal = new Dal(); 
 		return $this->Dal->assignTask($this->Task->Id, $userid);
 	}
+	
+	function unassignTask($userid)
+	{
+		$this->Dal = new Dal(); 
+		$retval =  $this->Dal->unassignTask($this->Task->Id, $userid);
+		$this->Dal->Close();
+		return $retval ; 
+	}
 }
 ?>

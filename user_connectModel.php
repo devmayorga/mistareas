@@ -14,11 +14,11 @@ class userConnectModel{
 		{
 			
 			$this->Dal = new Dal();
-			$this->User1 = $this->Dal->GetUser($p_userid1);
+			$this->User1 = $this->Dal->getUser($p_userid1);
 			$this->Dal->Close();
 			
 			$this->Dal = new Dal();
-			$this->User2 = $this->Dal->GetUser($p_userid2);
+			$this->User2 = $this->Dal->getUser($p_userid2);
 			$this->Dal->Close();
 		}
 		catch (Exception $e)

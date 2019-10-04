@@ -11,7 +11,7 @@ class subirarchivosModel{
 		$this->Dal = new Dal();
 		try
 		{
-		$this->User = $this->Dal->GetUser($p_userid);
+		$this->User = $this->Dal->getUser($p_userid);
 		}
 		catch (Exception $e)
 		{

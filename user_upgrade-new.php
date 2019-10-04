@@ -38,45 +38,45 @@ if(isset($_POST["enviar"]))
 							$filename = $model["surgery"]["id"] . "_". $model["documentType"] ."_".$file["name"] ;
 							$directory = "content/documents/tasks/" . $model["surgery"]["id"] . "/";
 							
-							// $output .= "<br />-SUBIENDO ARCHIVO ". ++$i ."-"   ;
+							$output .= "<br />-SUBIENDO ARCHIVO ". ++$i ."-"   ;
 							$validDirectory = false ;
 							if(!is_dir($directory))
 							{
-								// $output .= "<br /> no existe.";
-								// $output .= "<br />Intentando crear directorio:";
-								// $output .= "<br />Verificando directorio para subir archivos.";
+								$output .= " no existe.";
+								$output .= "<br />Intentando crear directorio:";
+								$output .= "<br />Verificando directorio para subir archivos.";
 								if(mkdir ( $directory, 0777, true ))
 								{
-									// $output .= "<br />Directorio creado:" . "OK" ;  
+									$output .= "<br />Directorio creado:" . "OK" ;  
 									
 								}
 								else
 								{
-									// $output .= "<br />Directorio NO creado:" . " FALLO" ;  
+									$output .= "<br />Directorio NO creado:" . " FALLO" ;  
 								}
 								
 							
 							}
 							else
 							{
-								// $output .= "<br />Directorio OK!";
+								$output .= "<br />Directorio OK!";
 							}
 							//echo $output ; $output = "" ;
 							$target_path = $directory . $filename ;
 							// $output .= "<br />Guardando " . $filename . " in " . $target_path;
-							// $output .= "<br />Guardando archivo" ;
+							$output .= "<br />Guardando archivo" ;
 							// echo $output ; $output = "" ;
 							// - - - ! 20190518 - Ensure created folder has correct permissions
 							chmod($directory, 0755);
 							if(move_uploaded_file($file['tmp_name'], $target_path)) 
 							{
-								// $output .= "<br />El archivo " . $filename ." se ha subido exitosamente al Sistema de Archivos!";
+								$output .= "<br />El archivo " . $filename ." se ha subido exitosamente al Sistema de Archivos!";
 								//echo $output ; $output = "" ;
 								include_once("Dal.php");
 								$Dal = new Dal();
 								$sql2 = "insert into document (url, type, taskid) values ('". $filename ."', ". $type .", ". $model["surgery"]["id"] .")";
 								$res2 = mysqli_query($Dal->con, $sql2) or die ("Error al registrar el documento en el Sistema: " . $filename . "... Mensaje del sistema: " . mysqli_error($Dal->$con));
-								// $output .= "<br />El archivo " . $filename ." se ha registrado correctamente en el Sistema!";
+								$output .= "<br />El archivo " . $filename ." se ha registrado correctamente en el Sistema!";
 								// echo $output ; $output = "" ;
 								?>
 								
@@ -86,7 +86,7 @@ if(isset($_POST["enviar"]))
 								$output .= "<br />Error al subir el archivo: " . $filename . "... Mensaje del sistema: Error en I/O ";					
 								// echo $output ; $output = "" ;
 							}
-							// $output .= "<br />-CARGA DE ARCHIVO ". $i ." TERMINADA-";
+							$output .= "<br />-CARGA DE ARCHIVO ". $i ." TERMINADA-";
 							//echo $output ;
 						}
 						$output .= "<br>*****DOCUMENTOS PROCESADOS: ". $i ."*****";

@@ -1,168 +1,426 @@
 <?php
+include_once("User.php");
+include_once("todolistModel.php");
+include_once("Partials.php");
 session_start();
-include("db/dal.php");
-//include ("../enums.php");
 
-// - - - > If user is already authenticated
-// . . . > Redirect to main page&&!!!!
-if (isset($_SESSION["User"]["validuser"])  )
-{
-	
-	header("location: home.php" );
-}
-// . . . > Check if form was sent from this page (or at least a post with all parameters set)
-// - - - > Display login form
-elseif (! ( isset($_POST["txt_user"]) && isset($_POST["txt_pass"]) && isset($_POST["send"])    )    )
-{
-	// - - - > If error message is set... Display message to the user
-	if (isset($_GET["msg"]))
-	{
-		// - - - > $ErrorMessage is defined in enums.php (Look at the bottom of this file)
-		//echo $ErrorMessage[1] ;
-		echo "Error";
-		
-	}
-	?>
-	<div style="width: 50%; margin: 200px auto;">
-		
-		<table width="100%">
-			<tr>
-				<th>Crear cuenta en Mis tAreAs</th>
-				<th>Nuestros Patrocinadores</th>
-			</tr>
-		</table>
-		<table width="100%" border>
-			<tr width="50%">
-				<td>
-				<form action="user_create.php" method="post" name="form_login">
-					<table>	
-						<tr>
-							<td>&nbsp;</td>
-							<td>ESCRIBA UN NUEVO NOMBRE DE USUARIO Y CONTRASEÑA.</td>
-						</tr>
-						<tr>
-							<th>User</th>
-							<td><input type="text" name="txt_user" id="txt_user" /></td>
-						</tr>
-						<tr>
-							<th>Password</th>
-							<td><input type="text" name="txt_pass" id="txt_pass" /></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td><input type="submit" value="Crear" name="send" id="btn_send" /> o bien 
-							<a href="index.php">Acceder aquí</a> con un usuario existente
-							</td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-						</tr>
-					</table>
-					
-					<input type="hidden" name="appid" value="<?php echo $_GET["appid"]?>" />
-					
-				</form>
-				</td>
-				<td width="50%">
-				<p>
-				<ul>
-					<li><a href="http://www.incubadoradetalento.com" target="_blank">Incubadora TALENT</a></li>
-					<li><a href="https://josemayorga.com">josemayorga.com</a></li>
-				</ul>
-				</p>
-				</td>
-			</tr>
-			
-		</table>
-		<p>
-		Al crear una Cuenta usted tendrá un código de Usuario que es el que debe dar a Conocer a sus Maestros para que le puedan asignar 
-		tareas dentro del Sistema.
-		</p>
-	</div>
-	
-	<?php
+//
+if(!isset($_SESSION["User"]))
+{	
+	$userid = 0 ; 
 }
 else
-// - - - > Authentication variables were sent by this application
-// - - - > Authenticate user
 {
-
-	// - - -> Here is where all common user information is holded
-	// - - - ! Check parameters were sent correctly
-
-	// - - - ! Start a fake session
-	//~ if($_POST["appid"] == "todolist")
-	//~ {
-	
-	
-		$username = $_POST["txt_user"];
-		$password = $_POST["txt_pass"];
-		if( strlen($username)> 0 && strlen($password) > 0)
-		{
-			// dal.authenticateUser(str,str)
-			// $User = authenticateUser($username,$password);
-			$User = createUser($username,$password);
-		        if($User["validuser"])
-			{
-				$_SESSION["User"] = $User ;
-				//echo "User logged";
-				header("location: todolist.php" ) ;
-			}
-			else
-			{
-				//echo "User not logged";
-				die("El nombre de usuario ". $User["username"] ." ya existe. Eljia otro <a href='user_create.php'>AQUI</a>");
-			}
-			
-			
-			
-		//~ if ($_POST["txt_user"] == "benas" && $_POST["txt_pass"] == "benas")
-		//~ {
-			//~ $_SESSION["auth"] = true ;
-			//~ $_SESSION["group"] = 2 ;
-			//~ $_SESSION["user"] = $_POST["txt_user"];
-			//~ $_SESSION["simba_userid"] = 5;
-			//~ header("location: ../" . $_POST["appid"] ) ;
-		//~ }
-		//~ else
-		//~ {
-			//~ header("location: ../" . $_POST["appid"] . "?appid=" . $_POST["appid"] ) ;
-		//~ }
-		
-		
-		}
-	//~ else
-	//~ {
-		//~ echo "No path..";
-	//~ }
-	
-	
-	//echo "Authenticate user";
-	//echo "Redirect to: " . "../../". $_POST["appid"];
-
-
-
-
-	// - - - ! Authenticate via google
-	/*
-
-	$clientid = "403333686677.apps.googleusercontent.com";
-	$redirecturi = "http://www.atomic.mx/experiments/auth/google/index.php";
-
-
-	$location = "https://accounts.google.com/o/oauth2/auth?"
-		. "client_id=" . $clientid
-		. "&" . "redirect_uri=" . $redirecturi
-		. "&" . "scope=https://www.google.com/m8/feeds/"
-		. "&" . "response_type=token";
-		
-	//$location = "http://google.com";
-	 header( 'Location: ' . $location ) ;
-	 
-	 */
+	$userid = $_SESSION["User"]["id"];
 }
 
+
+try{
+$Model = new todolistModel($userid);
+/*A estas alturas del partido. Si el Usuario no tiene Id es porque caducó la sesion.*/
+if(strlen($Model->User->Name) < 1)
+{
+  ?>
+  <script language="javascript">
+  window.location.href="sesionExpirada.php";
+  </script>
+  <?php
+}
+}
+catch(Exception $e) {
+	echo "AS";
+}
+
+
+
+if($Model->User->Type != 1)
+{
+	?>
+	CUENTA NO VALIDA PARA ESTA ACCION
+	<?php
+	die();
+}
 
 
 ?>
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>mistareas.com.mx</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="css/modern-business.css" rel="stylesheet">
+
+
+
+
+
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+	  <?php
+	  Partial("partial-navigator", $Model->User , "" ) ;
+	  ?>
+  
+  
+  <!-- Page Content -->
+  <div class="container">
+	<br>
+	<br>
+	<br>
+	
+	<?php
+	include_once("user_create-old.php");
+	?>
+	
+	<br>
+	<br>
+	<br>
+	<br>
+
+  <?php
+  Partial("partial-footer", null, "");
+  ?>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+
+	<script type="text/javascript" >
+
+function activateTaskItemActions()
+	{
+		
+		
+		
+		/*** share button********/
+	
+		$(".img-share").click(function(){
+			assignForm = $(this).parent().parent().find('.task-assign-user-container') ;
+			// Checks css for display:[none|block], ignores visibility:[true|false]
+			if(assignForm.is(":visible"))
+			{
+				assignForm.hide();
+			}
+			else
+			{
+			// The same works with hidden
+			assignForm.is(":hidden");
+			$(assignForm).show();
+			}
+		});
+		/************************/
+		
+		/*** cancel share button********/
+		$(".btn-share-cancel").click(function(){
+				$(this).parent().find("input[name='assigned-userid']").val("");
+				$(this).parent().find("input[type='submit']").prop("disabled", "disabled");
+				$(this).parent().parent().parent().find(".img-share").click();
+		});
+		/************************/
+		
+		
+		
+		/*** completed checkbox */
+		$('.chk_completed').click(function(){
+			
+			var id = $(this).parent().attr('ref') ;
+			var done = 1 ; 
+			var parent = $(this).parent();
+			$(this).hide();
+			/*if(done == 1)
+			{
+				$(this).parent().parent().attr("style", "background-color:#DCF0F7;");
+			}
+			else
+			{
+				$(this).parent().parent().attr("style", "background-color:white;");
+			}*/
+			//alert("id: " + id + "done" + done);
+			$.ajax({
+				type: "POST",
+				url: "task_update.php",
+				data: "id=" +id + "&done="+ done ,
+				success: function(msg){
+					//alert("tarea actualizada");
+					parent.append('<img  src="img/flag-color.png" width="64" /><a href="task_undo.php?t='+ id +'"><img  src="img/undo.png" width="24" /></a>');
+				}
+			});
+		});
+		/************************/
+		
+		$('.img-action-left').hover(function(){
+			$(this).attr('src','img/left-black.png');
+		});
+		$('.img-action-left').mouseout(function(){
+			$(this).attr('src','img/left-color.png');
+		});
+		
+		$('.img-action-left').click(function(){		
+			$(this).parent().parent().find('.tasks-list-item-actions').show();
+			
+			var rightArrow = $(this).parent().parent().find('.img-action-right');
+			rightArrow.show();
+			$(this).hide();
+			
+			
+			$('.img-action-right').hover(function(){
+				$(this).attr('src','img/right-black.png');
+				
+			});
+			$('.img-action-right').mouseout(function(){
+			$(this).attr('src','img/right-color.png');
+			});
+			
+			
+			
+			rightArrow.click(function(){		
+				$(this).parent().parent().find('.tasks-list-item-actions').hide();
+				var leftArrow = $(this).parent().parent().find('.img-action-left');
+				leftArrow.show();
+				$(this).hide();			
+			});
+			
+			
+			
+		});
+	}
+	
+
+$(document).ready(function(){
+	
+	
+	$('#exampleModal').on('show.bs.modal', function (event) {
+	  var button = $(event.relatedTarget); // Button that triggered the modal
+	  var usuariosAsignables ;
+	  // alert("*" + button.data('whatever').trim().length + "*");
+	  if(  button.data('whatever').trim().length < 1 )
+	  {
+		  usuariosAsignables = {};
+	  }
+	  else
+	  {
+		  usuariosAsignables = JSON.parse(button.data('whatever')); // Extract info from data-* attributes
+	  }
+	  
+	  var tareaNombre = button.data('whatever2') ;// Extract info from data-* attributes
+	  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+	  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+	  var modal = $(this);
+	  modal.find('.modal-body p').empty();
+	  modal.find('.modal-title').text('Seleccione el Usuario a asociar con la Tarea ' + tareaNombre);
+	  modal.find('.modal-body p').text("Usuarios disponibles: ");
+	  // modal.find('.modal-body p').append("<ul></ul>");
+	  $.each(usuariosAsignables, function(key, item){
+		modal.find('.modal-body p ').append("<br /><button data-dismiss='modal' class='btn btn-primary candidato' value='"+ item.Id +"'>"+ item.Id + "-" + item.Name +"</button>");  
+	  });
+	  modal.find(".candidato").click(function(){
+		  // alert($(this).val());
+		  button.parent().find("input[name='assigned-userid']").val($(this).val());
+		  button.parent().find("input[type='submit']").prop("disabled","");
+	  });
+	  
+	  
+	})
+	
+	
+	
+	
+	$('#add-project-button').hide();
+	$('#description').focus();
+	
+	
+	/************** Task Item actions *******************/
+	
+		 activateTaskItemActions();
+	
+	
+	/****************************************************/
+	
+	
+	
+	
+	/*** transfer button********/
+	
+	$(".img-transfer").click(function(){
+		transferForm = $(this).parent().parent().find('.task-transfer-container') ;
+		// Checks css for display:[none|block], ignores visibility:[true|false]
+		if(transferForm.is(":visible"))
+		{
+			transferForm.hide();
+		}
+		else
+		{
+		// The same works with hidden
+		transferForm.is(":hidden");
+		$(transferForm).show();
+		}
+	});
+	/************************/
+	
+	<?php
+	$actions = ["delete", "edit", "add","addproject", "hide", "logout", "chrono", "aula", "menuproject", "home", "pdf", "share", "up", "transfer"];
+	foreach($actions as $action)
+	{
+		?>
+		$('.img-<?php echo $action ;?>').hover(function(){
+		$(this).attr('src','img/<?php echo $action ;?>-black.png');
+		});
+		$('.img-<?php echo $action ;?>').mouseout(function(){
+			$(this).attr('src','img/<?php echo $action ;?>-color.png');
+		});
+		<?php
+	}
+	?>
+	
+	
+	
+	
+	$("#img-project-menu").click(function(){
+		$(this).parent().parent().find("#projectslist").show();
+		$("#add-project-button").show();
+		$(this).hide();
+	});
+	
+	$("#project-menu-hide").click(function(){
+		$(this).parent().hide();
+		$("#add-project-button").hide();
+		$(this).parent().parent().find("#img-project-menu").show();		
+	});
+	
+	$("#add-project-button").click(function(){		
+		$("#create-new-project-form").show();
+		$(this).hide();
+	});
+	$("#hide-project-button").click(function(){		
+		$("#create-new-project-form").hide();
+		$("#add-project-button").show();
+	});
+	
+	$("#hide-task-form-button").click(function(){		
+		$("#task-add-form").hide();
+		$("#task-add-button").show();
+	});
+	
+	$("#task-add-button").click(function(){		
+		$("#task-add-form").show();
+		$("#description").focus();
+		$(this).hide();
+	});
+
+	
+	
+	$('.transferProject').click(function(){
+		var id = $(this).parent().parent().attr('ref') ;
+		var newProjectId = $(this).parent().find('.projectslist').find(":selected").val();
+		var tareaTransferida = $(this).parent().parent().parent().parent();
+		// alert(tareaTransferida.html());
+		$.ajax({
+			type: "post",
+			url: "task_edit.php",
+			data: "transferir=transferir&taskid=" +id + "&projectid="+ newProjectId ,
+			success: function(msg){
+				tareaTransferida.html(msg);
+				
+			}
+		});
+	});
+	
+	
+
+	$('#add').click(function(){
+		var description = $('#description').val() ;
+		var done = $('#done').prop('checked') ? 1 : 0 ;
+		//alert($("#done").prop("checked"));
+		var projectid = $('#ddl_projectid').val() ;
+		
+		if( ! description )
+		{
+			alert ("Pon una description!");
+			$('#description').focus();
+			return ;
+		}
+		$.ajax({
+			async: false,
+			type: "POST",
+			url: "task_add.php",
+			data: "description=" +description + "&done="+ done  + "&projectid=" + projectid,
+			success: function(msg){
+				
+				$('#description').val('');
+				$('#done').attr('checked', false);
+				
+				$('#accordion').append(msg);
+				/****
+				$('tr:last').find('.chk_completed').click(function(){
+					var id = $(this).parent().parent().attr('ref') ;
+					var done = $(this).attr('checked') ? "1" : "0" ;
+					$.ajax({
+						type: "POST",
+						url: "task_update.php",
+						data: "id=" +id + "&done="+ done ,
+						success: function(msg){
+							alert(msg);
+						}
+					});
+					
+				});
+				****/
+				//alert("activar funciones de items");
+				activateTaskItemActions();
+			}
+		});
+		
+	});
+	
+	$('#addproject').click(function(){
+		var name = $('#projectname').val() ;
+		
+		if( ! name )
+		{
+			alert ("Pon un nombre de projecto!");
+			$('#projectname').focus();
+			return ;
+		}
+		//$(this).parent().parent().parent().hide();
+		$('#create-new-project-form').hide();
+		$.ajax({
+			async: false,
+			type: "POST",
+			url: "project_add.php",
+			data: "name=" +name  ,
+			success: function(msg){
+				$('#projectname').val('');				
+				//$('#projectslist').append(msg);
+				// Begin test case [ 1 ] : Exist a childElement --> All working correctly
+				var sp2 = $("#add-project-button");
+				$('#projectslist').insertBefore(msg, sp2);
+			}
+		});
+		
+	});
+
+});
+
+</script>
+
+
+
+</body>
+
+</html>
