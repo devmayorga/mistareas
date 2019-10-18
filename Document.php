@@ -13,13 +13,14 @@ class Document
 	public $Comment ; 
 	
 	function __construct($p_id
-		, $p_rowdate
-		, $p_type
-		, $p_taskid
-		, $p_taskuserid
-		, $p_url
-		, $p_uploadedby
-		, $p_comment)
+		, $p_rowdate = ""
+		, $p_type = ""
+		, $p_taskid = ""
+		, $p_taskuserid = ""
+		, $p_url = ""
+		, $p_uploadedby = ""
+		, $p_comment="" 
+		)
 		{
 			$this->Id = $p_id;
 			$this->Rowdate = $p_rowdate;

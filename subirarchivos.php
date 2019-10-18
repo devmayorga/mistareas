@@ -39,6 +39,7 @@ if(isset($_POST["enviar"]))
 							$directory = "content/documents/tasks/" . $model["surgery"]["id"] . "/";
 							
 							// $output .= "<br />-SUBIENDO ARCHIVO ". ++$i ."-"   ;
+							$i++;
 							$validDirectory = false ;
 							if(!is_dir($directory))
 							{

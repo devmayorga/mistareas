@@ -797,7 +797,27 @@ class Dal
 	}
 	
 	
-	
+	function deleteDocument($id)
+	{
+		$method = "Dal.deleteProject";
+		try
+		{
+			mysqli_begin_transaction($this->con);
+			$sql1 = "delete from document where id = " . $id; 
+			//$sql2 = "delete from project where id = " . $id; 
+			mysqli_query($this->con, $sql1);
+			//mysqli_query($this->con, $sql2);
+			mysqli_commit($this->con);
+			return true ;
+		}
+		catch (Exception $e) 
+		{
+			// An exception has been thrown
+			// We must rollback the transaction
+			mysqli_rollback($this->con);
+			return false ;
+		}
+	}	
 	
 	
 

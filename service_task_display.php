@@ -41,7 +41,22 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
 					{
 						if($document->Type == $documentoAcademico)
 						{
-							echo "<br /><a href='content/documents/tasks/". $Model2->Task->Id ."/". $document->Url ."'>" . $i . $document->Url . "</a>"; 
+							$deleteString = "" ; 
+							if($Model2->User->Id == $Model2->TaskOwner)
+							{
+								$deleteString = "<a href='document_delete.php"
+							."?p=". $document->Id 
+							."&document_name=". $document->Url 
+							."&project_id=". $Model2->Task->ProjectId  
+							. ">[X]</a>" ;
+							}
+							
+							echo "<br /><a href='content/documents/tasks/". $Model2->Task->Id ."/". $document->Url 
+							."'>" 
+							. $i 
+							. $document->Url 
+							. "</a>"
+							. $deleteString; 
 						}
 						$i ++ ;						
 					}
@@ -101,7 +116,17 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
 					{
 						if($document->Type == $ejercicioEnClase)
 						{
-							echo "<br /><a href='content/documents/tasks/". $Model2->Task->Id ."/". $document->Url ."'>" . $i . $document->Url. "</a>"; 
+							echo "<br /><a href='content/documents/tasks/". $Model2->Task->Id ."/". $document->Url 
+							."'>" 
+							. $i 
+							. $document->Url 
+							. "</a><a href='document_delete.php"
+							."?p=". $document->Id 
+							."&document_name=". $document->Url 
+							."&project_id=". $Model2->Task->ProjectId ."'"
+							
+							.">"
+							."[X]</a>";
 						}
 						$i ++ ;						
 					}
@@ -162,7 +187,17 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
 					{
 						if($document->Type == $iniciativasPostClase)
 						{
-							echo "<br /><a href='content/documents/tasks/". $Model2->Task->Id ."/". $document->Url ."'>" . $i . $document->Url. "</a>"; 
+							echo "<br /><a href='content/documents/tasks/". $Model2->Task->Id ."/". $document->Url 
+							."'>" 
+							. $i 
+							. $document->Url 
+							. "</a><a href='document_delete.php"
+							."?p=". $document->Id 
+							."&document_name=". $document->Url 
+							."&project_id=-1'"
+							
+							.">"
+							."[X]</a>";
 						}
 						$i ++ ;						
 					}
