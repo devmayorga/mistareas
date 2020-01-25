@@ -63,6 +63,7 @@ class Dal
 				, id 
 				, email
 				, emailname
+				, artistname
 				from user where id = '". $p_id ."'" ;
 			$res = mysqli_query($this->con,$sql) or die ("Error in method ". $method ."... MySQL dice: " . mysqli_error($this->con) );
 			mysqli_commit($this->con);
@@ -71,6 +72,7 @@ class Dal
 			$user->Name = $row["username"];
 			$user->Email = $row["email"];			
 			$user->EmailName = $row["emailname"];			
+			$user->ArtistName = $row["artistname"];			
 			$user->Type = $row["type"];
 			$user->Id = $row["id"];
 			try
@@ -547,7 +549,7 @@ class Dal
 			{
 				$Friend = new User(
 					 $row["friendid"]
-					 , $row["name"]
+					 , $row["artistname"]
 					);
 				$Friends[] = $Friend ; 
 				
@@ -588,7 +590,7 @@ class Dal
 			{
 				$Friend = new User(
 					 $row["friendid"]
-					 , $row["name"]
+					 , $row["artistname"]
 					);
 				$Friends[] = $Friend ; 
 				

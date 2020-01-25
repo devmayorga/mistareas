@@ -72,12 +72,13 @@ else
 {
 
 	
-		$username = $_POST["txt_user"];
-		$password = $_POST["txt_pass"];
+		$username = md5($_POST["txt_user"]);
+		$artistname = $_POST["txt_user"];
+		$password = md5($_POST["txt_pass"]);
 		if( strlen($username)> 0 && strlen($password) > 0)
 		{
 	
-			$User = createUser($username,$password);
+			$User = createUser($username,$password, $artistname);
 		        if($User["validuser"])
 			{
 				//$_SESSION["User"] = $User ;

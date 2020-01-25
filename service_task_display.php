@@ -25,9 +25,18 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
           <!--<a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>-->
           <div class="card-body">
             <h4 class="card-title">
-              Recursos Académicos
+              Recursos Académicos 
 			  <?php
 			  $type=$documentoAcademico ;
+			  if($Model2->User->Type == $masterType 
+					&& $Model2->User->Id == $Model2->TaskOwner)
+			  {
+				  ?>
+				  <a href="subirarchivos.php?uid=<?php echo $_GET["uid"] ;?>&type=<?php echo $type ; ?>&task=<?php echo $Model2->Task->Id ;?>"><img src="img/document-add.png" /></a>
+				  
+				  <?php
+			  }
+			  
 			  ?>
             </h4>
             <p class="card-text">
@@ -37,10 +46,12 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
 				$i = 1 ;
 				if(!empty($Model2->Documents))
 				{
+					$j=0;
 					foreach($Model2->Documents as $document)
 					{
 						if($document->Type == $documentoAcademico)
 						{
+							$j++;
 							$deleteString = "" ; 
 							if($Model2->User->Id == $Model2->TaskOwner)
 							{
@@ -48,13 +59,13 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
 							."?p=". $document->Id 
 							."&document_name=". $document->Url 
 							."&project_id=". $Model2->Task->ProjectId  
-							. ">[X]</a>" ;
+							. "'>[X]</a>" ;
 							}
 							
 							echo "<br /><a href='content/documents/tasks/". $Model2->Task->Id ."/". $document->Url 
 							."'>" 
-							. $i 
-							. $document->Url 
+							. "Recurso Académico " . $j 
+							//. $document->Url 
 							. "</a>"
 							. $deleteString; 
 						}
@@ -81,7 +92,7 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
 					
 					?>
 					<br>
-					<a href="subirarchivos.php?uid=<?php echo $_GET["uid"] ;?>&type=<?php echo $type ; ?>&task=<?php echo $Model2->Task->Id ;?>">Subir Recursos Académicos</a>
+					
 					<?php
 				}
 				
@@ -101,6 +112,24 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
           <div class="card-body">
             <h4 class="card-title">
               Ejercicios
+			  <?php
+			  
+			  if($Model2->User->Type == $masterType 
+					&& $Model2->User->Id == $Model2->TaskOwner
+					
+					)
+					{
+					
+						
+							?>
+							<br>
+							<a href="subirarchivos.php?uid=<?php echo $_GET["uid"] ;?>&type=<?php echo $type?>&task=<?php echo $Model2->Task->Id ;?>"><img src="img/document-add.png" /></a>
+							<?php
+						
+						
+					}
+			  
+			  ?>
 				<?php
 			  $type=$ejercicioEnClase ;
 			  ?>
@@ -112,21 +141,28 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
 				$i = 1 ;
 				if(!empty($Model2->Documents))
 				{
+					$j=0;
 					foreach($Model2->Documents as $document)
 					{
 						if($document->Type == $ejercicioEnClase)
 						{
-							echo "<br /><a href='content/documents/tasks/". $Model2->Task->Id ."/". $document->Url 
-							."'>" 
-							. $i 
-							. $document->Url 
-							. "</a><a href='document_delete.php"
+							$j++;
+							$deleteString = "" ;
+							if($Model2->User->Id == $document->UploadedBy)
+							{
+								$deleteString = "<a href='document_delete.php"
 							."?p=". $document->Id 
 							."&document_name=". $document->Url 
-							."&project_id=". $Model2->Task->ProjectId ."'"
+							."&project_id=". $Model2->Task->ProjectId  
+							. "'>[X]</a>" ;
+							}
 							
-							.">"
-							."[X]</a>";
+							echo "<br /><a href='content/documents/tasks/". $Model2->Task->Id ."/". $document->Url 
+							."'>" 
+							. "Ejercicio " . $j 
+							//. $document->Url 
+							. "</a>"
+							. $deleteString;
 						}
 						$i ++ ;						
 					}
@@ -143,20 +179,7 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
 					<?php
 				}
 				
-				if($Model2->User->Type == $masterType 
-					&& $Model2->User->Id == $Model2->TaskOwner
-					
-					)
-					{
-					
-						
-							?>
-							<br>
-							<a href="subirarchivos.php?uid=<?php echo $_GET["uid"] ;?>&type=<?php echo $type?>&task=<?php echo $Model2->Task->Id ;?>">Subir Ejercicios</a>
-							<?php
-						
-						
-					}
+				
 				
 				
 				?>
@@ -183,21 +206,33 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
 				$i = 1 ;
 				if(!empty($Model2->Documents))
 				{
+					$j=0;
 					foreach($Model2->Documents as $document)
 					{
 						if($document->Type == $iniciativasPostClase)
 						{
-							echo "<br /><a href='content/documents/tasks/". $Model2->Task->Id ."/". $document->Url 
-							."'>" 
-							. $i 
-							. $document->Url 
-							. "</a><a href='document_delete.php"
-							."?p=". $document->Id 
-							."&document_name=". $document->Url 
-							."&project_id=-1'"
 							
-							.">"
-							."[X]</a>";
+							$deleteString = "" ;
+							if($Model2->User->Id == $document->UploadedBy || $Model2->User->Type==1)
+							{
+								$j++;
+								$deleteString = "<a href='document_delete.php"
+								."?p=". $document->Id 
+								."&document_name=". $document->Url 
+								."&project_id=". $Model2->Task->ProjectId  
+								. "'>[X]</a>" ;
+							
+							$RecursoString = "<br /><a href='content/documents/tasks/". $Model2->Task->Id ."/". $document->Url 
+								."'>" 
+								. "Tarea " . $j . "</a>" ;
+							
+							
+							echo $RecursoString							
+								. $deleteString;
+							
+							}
+							
+							
 						}
 						$i ++ ;						
 					}
@@ -222,7 +257,7 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
 				
 					?>
 					<br>
-					<a href="subirarchivos.php?uid=<?php echo $_GET["uid"] ;?>&type=<?php echo $type?>&task=<?php echo $Model2->Task->Id ;?>">Subir Tareas</a>
+					<a href="subirarchivos.php?uid=<?php echo $_GET["uid"] ;?>&type=<?php echo $type?>&task=<?php echo $Model2->Task->Id ;?>"><img src="img/document-add.png" /></a>
 					<?php					
 					
 				}

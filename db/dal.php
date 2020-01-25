@@ -13,8 +13,8 @@ function authenticateUser($strUsername, $strPassword)
 		, id 
 		, email
 		, emailname
-		from user where username = '". $strUsername ."' 
-		and password = '". $strPassword. "' " ;
+		from user where username = '". md5($strUsername) ."' 
+		and password = '". md5($strPassword). "' " ;
 	$res = mysqli_query($con,$sql) or die ("Error al autenticar usuario... MySQL dice: " . mysqli_error($con) );
 	$row = mysqli_fetch_assoc($res);
 	$User["username"] = $row["username"];
@@ -64,7 +64,7 @@ function getCatalogWithUser($entity, $user)
 	
 }
 
-function createUser($strUsername, $strPassword)
+function createUser($strUsername, $strPassword, $strArtistName)
 {
 	include("connect.php");
 	
@@ -92,7 +92,7 @@ function createUser($strUsername, $strPassword)
 	{
 		
 		/* Se inserta el Usuario y despues se devuelve*/
-		$sql = "insert into user (username, password) values ('". $strUsername ."', '". $strPassword ."')" ;
+		$sql = "insert into user (username, password, artistname) values ('". $strUsername ."', '". $strPassword ."', '". $strArtistName ."')" ;
 		$res = mysqli_query($con,$sql) or die ("Error en dal.createUser(str,str)... MySQL dice: " . mysqli_error($con) . "<a href='index.php'>inicio</a>");
 	
 		

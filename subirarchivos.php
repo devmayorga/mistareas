@@ -75,7 +75,12 @@ if(isset($_POST["enviar"]))
 								//echo $output ; $output = "" ;
 								include_once("Dal.php");
 								$Dal = new Dal();
-								$sql2 = "insert into document (url, type, taskid) values ('". $filename ."', ". $type .", ". $model["surgery"]["id"] .")";
+								$sql2 = "insert into document (url, type, taskid, uploadedBy) values ('"
+									. $filename 
+									."', ". $type 
+									.", ". $model["surgery"]["id"] 
+									.", ". $model["patient"]["id"]
+									.")";
 								$res2 = mysqli_query($Dal->con, $sql2) or die ("Error al registrar el documento en el Sistema: " . $filename . "... Mensaje del sistema: " . mysqli_error($Dal->$con));
 								// $output .= "<br />El archivo " . $filename ." se ha registrado correctamente en el Sistema!";
 								// echo $output ; $output = "" ;
@@ -232,11 +237,15 @@ $currentType = $documentTypes[$_GET["type"]];
 		
 		
 		<input class="btn btn-success" type="submit" name="enviar" value="enviar" />
-		<a class="btn btn-secondary" href="todolist.php?p=<?php echo  $Model->User->Type == 1 ?  $currentProject->Id  : -1 ; ?>&ariaExpanded=<?php echo $currentTask->Id ; ?>#ancla-task-<?php echo $currentTask->Id ; ?>">
-		Cancelar</a>
-		<br />
-		<br />
-		</form>
+		
+		<?php
+		$UserType = $Model->User->Type==1 ? $currentProject->Id : "-1";
+		$linkToRender = 'todolist.php?p='
+			. $UserType 
+			. '&ariaExpanded='.$currentTask->Id.'#ancla-task-' . $currentTask->Id ;
+		
+		HtmlHelper::renderBackButton("Volver", $linkToRender);
+		?>	
 	
 
 	

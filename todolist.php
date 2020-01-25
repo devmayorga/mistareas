@@ -74,6 +74,21 @@ else
 </head>
 
 <body>
+	
+	<div id="loading">
+		<img src="img/giphy.gif" />
+	</div>
+	<script language="javascript">
+		function hideLoader() {
+			$('#loading').hide();
+			$('#content').show();
+		}
+		
+				
+			
+		
+	</script>
+	
 
   <!-- Navigation -->
 	  <?php
@@ -82,7 +97,7 @@ else
   
   
   <!-- Page Content -->
-  <div class="container">
+  <div class="container" id="content" style="display:none;">
 	<br>
     <!-- Page Heading/Breadcrumbs -->
 	<?php
@@ -91,7 +106,9 @@ else
 		header("location:home.php");
 	}
 	?>
-	<br />
+	
+	
+	<br /><br /><br />
     <h1 class="mt-4 mb-3 text-center">
 		<?php echo $currentProject->Name  ; ?>
       <small>
@@ -113,7 +130,32 @@ else
       <li class="breadcrumb-item">
         
       </li>
-      <li class="breadcrumb-item "><a href="home.php">Proyectos</a></li>
+      <li class="breadcrumb-item ">
+	  
+	  <?php
+	 	if ( $currentProject->Id != -1 && $Model->User->Type != 1 )
+		 {
+			 ?>
+			 <a href="home.php">
+			 <!-- <img class="img-pdf" src="img/pdf-color.png" /> -->
+			 <?php
+		 } 
+	  ?>
+	  
+	  Proyectos
+	  
+	  <?php
+	 	if ( $currentProject->Id != -1 )
+		 {
+			 ?>
+			 </a>
+			 <!-- <img class="img-pdf" src="img/pdf-color.png" /> -->
+			 <?php
+		 } 
+	  ?>
+	  
+	  
+	  </li>
 	  <li class="breadcrumb-item active ">
 	  <?php
 	  if($currentProject->Id > 0)
@@ -325,8 +367,9 @@ function activateTaskItemActions()
 	
 
 $(document).ready(function(){
+	$("#content").hide();
 	
-	
+	setTimeout(hideLoader, 1 * 1000);
 	$('#exampleModal').on('show.bs.modal', function (event) {
 	  var button = $(event.relatedTarget); // Button that triggered the modal
 	  var usuariosAsignables ;

@@ -5,17 +5,17 @@ function Partial($partialToRender, $Model, $css_class)
 	{
 		case "partial-project-thumbnail":
 			?>
-			<div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+			<div class="col-lg-3 col-md-4 col-sm-6 portfolio-item" >
 				<div class="card h-100">
 				  <!--
 				  <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
 				  -->
 				  <div class="card-body">
 					<h4 class="card-title">
-					  <a href="todolist.php?p=<?php echo $Model->Id ; ?>">Proyecto: <?php echo $Model->Id < 0 ? "Asignado" : $Model->Id ; ?></a>
+					  <a href="todolist.php?p=<?php echo $Model->Id ; ?>"> <?php echo $Model->Id < 0 ? "Tareas asignadas" : $Model->Name ; ?></a>
 					</h4>
-					<p class="card-text">
-					<?php echo $Model->Name ; ?>
+					<p class="card-text" style="display:none;">
+					<?php echo $Model->Id ; ?>
 					</p>
 				  </div>
 				</div>
@@ -226,67 +226,145 @@ function Partial($partialToRender, $Model, $css_class)
 				  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				  </button>
-				  <div class="collapse navbar-collapse" id="navbarResponsive">
+				  <div class="collapse navbar-collapse" id="navbarResponsive" style="/*border:1px solid red;*/">
 				  
-					
-					<ul class="navbar-nav ml-auto">
-						
-						<?php
-							if( $Model->HasUserCreate() )
-							{
-								?>
-								<li class="nav-item" >
-								  <a class="nav-link" href="user_create.php">Crear Usuario</a>
-								</li>
-								<?php
-							}
+					<?php
+					if($Model!="EXPIRED")
+					{
 						?>
-						
-						<?php
-							if( $Model->Type==2 )
-							{
-								?>
-								<li class="nav-item" >
-								  <a class="nav-link" href="user_upgrade.php?uid=<?php echo $Model->Id ; ?>">ACTIVAR CUENTA PREMIUM</a>
-								</li>
+							<ul class="navbar-nav ml-left" >
+							
+							
+							<li class="nav-item" >
 								<?php
-							}
-						?>
-						
-						
-						<li class="nav-item" >
-						  <a class="nav-link" href="user_connections.php">Conexiones</a>
-						</li>
-						<li class="nav-item" >
-						  <a class="nav-link" href="home.php">Proyectos</a>
-						</li>
-					  <?php
-					  if(
-						$Model->Type == 1
-						&& $Model->HasTeamCreate() 
-						)
+								if($Model->Type==1)
+								{
+									?>
+									<a class="nav-link" href="home.php">Proyectos</a>
+									<?php
+								}
+								else
+								{
+									?>
+									<a class="nav-link" href="todolist.php">Tareas asignadas</a>
+									<?php
+								}
+								?>
+							  
+							</li>
+
+							<?php
+								if($Model->Type==1)
+								{
+									?>
+									<li class="nav-item" >
+									<a class="nav-link" href="todolist.php?p=-1">Tareas asignadas</a>
+									</li>
+
+									<?php
+								}
+								
+								?>
+
+							<li class="nav-item" >
+							  <a class="nav-link" href="user_connections.php">Conexiones</a>
+							</li>
+							<?php
+								if( $Model->HasUserCreate() )
+								{
+									?>
+									<li class="nav-item" >
+									  <a class="nav-link" href="user_create.php">Crear Usuario</a>
+									</li>
+									<?php
+								}
+							?>
+							
+						  <?php
+						  if(
+							$Model->Type == 1
+							&& $Model->HasTeamCreate() 
+							)
+							  {
+								  /*
+								  ?>
+								  <li class="nav-item" ><a  class="nav-link" href="teams.php">Equipos</a></li>
+								  <?php
+								  */
+							  }
+						  ?>
+						  
+						  <?php
+						  $tareasCompletadas = 0 ;
+						  $tareasPendientes = 0 ;
+						  foreach($Model->Projects as $projecto )
 						  {
-							  /*
-							  ?>
-							  <li class="nav-item" ><a  class="nav-link" href="teams.php">Equipos</a></li>
-							  <?php
-							  */
+							  foreach($projecto->Tasks as $tarea)
+							  {
+								  if($tarea->Completed == true)
+								  {
+									  $tareasCompletadas++;
+								  }
+								  else
+								  {
+									  $tareasPendientes++;
+								  }
+							  }
 						  }
-					  ?>
-					  <li class="nav-item" >
-					  <small >Bienvenido <b><?php echo $Model->Name ; ?></b> 
-						<br>Id de usuario: [<?php echo $Model->Id ; ?>] 
-						<br> Tipo de cuenta: <?php echo $Model->Type == 2 ? "Alumno" : "Maestro" ; ?> 
-					  </small>
-					  </li>
-					  <li class="nav-item">
-						<a class="nav-link" href="utils/auth/logout.php"><img src="img/logout-color.png"></a>
-					  </li>
+						  
+						  ?>
+						  <!--<li class="nav-item" >
+						  <small >Tareas Completadas: <b><?php echo $tareasCompletadas; ?></b> 
+							<br>Tareas Pendientes: <b><?php echo $tareasPendientes; ?></b> 
+						  </small>
+						  </li>
+						  -->
+						  
+						</ul>
+					  
+						<?php
+					}
 					
-					</ul>
-				  
+					?>
+					
 				  
 				  </div>
+				</div>
+				<div class="collapse navbar-collapse" id="navbarResponsive" style="/*border:1px solid red;*/">
+					<ul class="navbar-nav ml-auto" >
+					<li class="nav-item">
+							<p>
+							<small>
+						Bienvenido <b><?php echo$Model->ArtistName ;  ?></b>
+							<br>User Id: <b><?php  echo $Model->Id ;   ?></b>
+							<br> Tipo de cuenta: <b><?php echo $Model->Type == 2 ? "BÁSICA" : "COMPLETA" ; ?></b> 
+							<br >
+							<?php
+								if( $Model->Type==2 )
+								{
+									?>
+									
+									  <a class="nav-link" href="user_upgrade.php?uid=<?php echo $Model->Id ; ?>">ACTIVAR CUENTA COMPLETA</a>
+									
+									<?php
+								}
+							?>
+							</small>
+							</p>
+						  </li>
+							
+					
+					</ul>
+					<div>
+					<div class="collapse navbar-collapse" id="navbarResponsive" style="/*border:1px solid red;*/">
+					<ul class="navbar-nav ml-auto" >
+					
+							<li class="nav-item">
+								<a class="nav-link" href="utils/auth/logout.php"><img src="img/logout-color.png"></a>
+							</li>
+					
+					</ul>
+					<div>
 				</div>
 			  </nav>
 			
@@ -935,7 +1013,7 @@ function renderPartialUserFriends($User)
 		foreach($User->Friends as $friend)
 		{
 			?>
-			<li><?php echo "[" . $friend->Id . "] " .$friend->Name ; ?>
+			<li><?php echo "[" . $friend->Id . "] " .$friend->ArtistName ; ?>
 			
 			<?php
 			renderConectUsersButton($User, $friend, "desconectar", "Desconectar", "danger");
@@ -960,33 +1038,44 @@ function renderPartialUserNotFriends($User)
 	foreach($User->NotFriends as $friend)
 	{
 		$match = false ; 
-		?>
-		<br />
-		<li><?php echo "[" . $friend->Id . "] <b>" . $friend->Name . "</b>"; ?>
 		
+		
+		if($User->Type == 1
+			|| $User->getConnectionStatus($friend->Id) == "recibida")
+		{
+			?>
+		<br />
+		<li><?php echo "[" . $friend->Id . "] <b>" . $friend->Name . "</b>"; ?>	
 		<?php
+		}
+		
 			
 			if($User->getConnectionStatus($friend->Id) == "enviada")
-					{
-						$match = true ;
-						?>
-						(Solicitud enviada)
-						<?php
-						renderConectUsersButton($User, $friend, "desconectar", "Cancelar la solicitud", "danger");
-					}
-					elseif($User->getConnectionStatus($friend->Id) == "recibida")
-					{
-						?>
-						(Este usuario te ha agregado)  
-						<?php
-						renderConectUsersButton($friend, $User, "aceptar", "Aceptar", "success");
-						renderConectUsersButton($friend, $User, "desconectar", "Ignorar solicitud", "danger");
-					}
-					else
-					{
-						renderConectUsersButton($User, $friend, "solicitar", "Conectar", "primary");
-					}
-			
+			{
+				$match = true ;
+				?>
+				(Solicitud enviada)
+				<?php
+				renderConectUsersButton($User, $friend, "desconectar", "Cancelar la solicitud", "danger");
+			}
+			elseif($User->getConnectionStatus($friend->Id) == "recibida")
+			{
+				?>
+				(Este usuario te ha agregado)  
+				<?php
+				renderConectUsersButton($friend, $User, "aceptar", "Aceptar", "success");
+				renderConectUsersButton($friend, $User, "desconectar", "Ignorar solicitud", "danger");
+			}
+			else
+			{
+				if($User->Type == 1)
+				{
+					renderConectUsersButton($User, $friend, "solicitar", "Conectar", "primary");
+				}
+
+				
+			}
+	
 		?>
 		</li>
 		<?php

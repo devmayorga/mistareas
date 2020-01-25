@@ -14,6 +14,7 @@ class User
 	public $NotFriends ;
 	public $SolicitudesEnviadas ;
 	public $SolicitudesRecibidas ;
+	public $ArtistName = ""; 
 	
 	
     function __construct($p_id = 0, $p_name="")
@@ -22,6 +23,7 @@ class User
 		// $this->Dal = new Dal();
         $this->Id = $p_id ;
 		$this->Name = $p_name ;
+		$this->ArtistName = $p_name ;
 		try
 		{
 			// $this->Projects = $this->Dal->getUserProjects($this->Id);		

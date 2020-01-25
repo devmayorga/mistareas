@@ -20,7 +20,7 @@ class Project
 		else
 		{
 			$tasks = $this->Dal->getAssignedTasks($op_userId);
-			$name = "Tareas Asignadas";
+			$name = "TAREAS ASIGNADAS";
 		}
 		$this->Tasks = $tasks ;
 		$this->Name = $name ; 

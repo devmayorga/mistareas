@@ -1,18 +1,33 @@
 <?php
 class HtmlHelper
 {
-	static public function renderBackButton($label)
+	static public function renderBackButton($label, $link = null)
 	{
-	?>
-		<script>
-		function goBack() {
-		  window.history.back();
+		if($link != null)
+		{
+			$backButton = '<a class="btn btn-secondary" href="'. $link .'">'. $label .'</a>';
+			echo $backButton ;
 		}
-		</script> 
-		<button onclick="goBack()">
-		<?php echo $label ; ?>
-		</button>
-	<?php
+		else
+		{
+		
+				?>
+					<script>
+					function goBack() {
+					  window.history.back();
+					}
+					</script> 
+					<button onclick="goBack()">
+					<?php echo $label ; ?>
+					</button>
+				<?php
+		
+		
+		}
+		
+	
 	}
+	
+	
 }
 ?>

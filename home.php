@@ -13,6 +13,14 @@ if(strlen($Model->User->Name) < 1)
   </script>
   <?php
 }
+if($Model->User->Type > 1)
+{
+  ?>
+  <script language="javascript">
+  window.location.href="todolist.php?p=-1";
+  </script>
+  <?php
+}
 if(isset($_GET["p"]))
 {
 	foreach($Model->User->Projects as $p)
@@ -63,18 +71,37 @@ else
 </head>
 
 <body>
-
+	<div class="container" id="loading" >
+	
+			<img src="img/giphy.gif" />
+		</div>
+		
+		<script language="javascript">
+			function hideLoader() {
+				$('#loading').hide();
+				$('#content').show();
+			}
+			
+					
+				
+			
+		</script>
   <!-- Navigation -->
   <?php
   Partial("partial-navigator", $Model->User , "" ) ;
   ?>
 
   <!-- Page Content -->
-  <div class="container">
+  <div class="container" id="content" style="display:none;">
 
     <!-- Page Heading/Breadcrumbs -->
+	
 	<br />
-    <h1 class="mt-4 mb-3 text-center">PROYECTOS
+	<br />
+	<br />
+	
+    <h1 class="mt-4 mb-3 text-center">
+		PROYECTOS 
       <small>
 	  
 	 </small>
@@ -105,7 +132,10 @@ else
 		<?php
 				foreach($Model->User->Projects as $p)
 				{
-					Partial("partial-project-thumbnail", $p, "");
+					if($p->Id != -1)
+					{
+						Partial("partial-project-thumbnail", $p, "");
+					}
 				}
 		?>
 		
@@ -221,6 +251,9 @@ function activateTaskItemActions()
 	
 
 $(document).ready(function(){
+	$("#content").hide();
+	
+	setTimeout(hideLoader, 1 * 1000);
 
 	$('#description').focus();
 	

@@ -2,6 +2,7 @@
 include_once("Partials.php");
 include_once("project_editModel.php");
 include_once("todolistModel.php");
+include_once("HtmlHelper.php");
 session_start();
 
 if(!isset($_SESSION["User"]))
@@ -119,10 +120,13 @@ if(!empty($_GET["p"]))
 							  -->
 							  <div class="card-body">
 								<h4 class="card-title">
-								  CANCELAR
+								  VOLVER
 								</h4>
 								<p class="card-text" >
-									<a class="btn btn-secondary" href="todolist.php?p=<?php echo $Model->Project->Id ; ?>">Volver</a>
+									
+									<?php
+									HtmlHelper::renderBackButton("Volver", 'todolist.php?p=' . $Model->Project->Id );
+									?>
 								</p>
 							  </div>
 							</div>								
