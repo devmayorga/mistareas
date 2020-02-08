@@ -15,6 +15,8 @@ class User
 	public $SolicitudesEnviadas ;
 	public $SolicitudesRecibidas ;
 	public $ArtistName = ""; 
+	public $Licencia ;
+	public $TempPass = "";
 	
 	
     function __construct($p_id = 0, $p_name="")
@@ -24,6 +26,7 @@ class User
         $this->Id = $p_id ;
 		$this->Name = $p_name ;
 		$this->ArtistName = $p_name ;
+		$this->TempPass = "simple";
 		try
 		{
 			// $this->Projects = $this->Dal->getUserProjects($this->Id);		

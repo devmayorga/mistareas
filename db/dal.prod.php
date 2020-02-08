@@ -88,7 +88,7 @@ function getHoraServidor()
 		
 	}
 
-function createUser($strUsername, $strPassword, $strArtistName, $strEmail = "testing@josemayorga.com")
+function createUser($strUsername, $strPassword, $strArtistName)
 {
 	include("connect.php");
 	
@@ -116,12 +116,8 @@ function createUser($strUsername, $strPassword, $strArtistName, $strEmail = "tes
 	{
 		
 		/* Se inserta el Usuario y despues se devuelve*/
+		$sql = "insert into user (username, password, artistname) values ('". $strUsername ."', '". $strPassword ."', '". $strArtistName ."')" ;
 		
-		$sql = "insert into user (username, password, artistname, email) values ('". $strUsername ."', '". $strPassword ."', '". $strArtistName ."')" ;
-		if($strEmail != "testing@josemayorga.com)")
-		{
-			$sql = "insert into user (username, password, artistname, email, emailname, type) values ('". $strUsername ."', '". $strPassword ."', '". $strArtistName ."', '" . $strEmail ."','". $strArtistName ."', 2)" ;	
-		}
 		$res = mysqli_query($con,$sql) or die ("Error en dal.createUser(str,str)... MySQL dice: " . mysqli_error($con) . "<a href='index.php'>inicio</a>");
 	
 		

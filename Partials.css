@@ -5,7 +5,12 @@ Rosa
 #f5ddea
 
 */
-
+@keyframes blinker {
+	50% 
+	{
+		opacity: 0;
+	}
+};
 .clara-box
 {
 	border: 1px solid red ;

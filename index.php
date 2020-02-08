@@ -36,6 +36,30 @@ if(isset($_SESSION["User"]))
   <!-- Custom styles for this template -->
   <link href="css/landing-page.min.css" rel="stylesheet">
 
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script type="text/javascript" >
+    $(document).ready(function(){
+
+      $("#buton-solicitarprueba").click(function(){
+        $.ajax({
+          async: false,
+          type: "POST",
+          url: "solicitar_prueba.php" ,
+          data: "buton-solicitarprueba=1&txt-email=" + $("#txt-email").val(),
+          success: function(msg){
+            alert(msg);
+          }
+		    });
+
+      });
+
+    });
+
+
+  </script>
+
 </head>
 
 <body>
@@ -91,22 +115,7 @@ if(isset($_SESSION["User"]))
 		  
         </div>
 		
-        <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-          <!--<form>-->
-			<br /><br /><br />
-            <!--<div class="form-row">-->
-              <!--
-			  <div class="col-12 col-md-9 mb-2 mb-md-0">
-                <input type="email" class="form-control form-control-lg" placeholder="Enter your email...">
-              </div>
-			  -->
-			  
-              <div class="col-xl-9 mx-auto">
-                <a href="#icons"  class="btn btn-block btn-lg btn-primary">Conocer mas</a>
-              </div>
-            <!--</div>-->
-          <!--</form>-->
-        </div>
+       
 		
 		
       </div>
@@ -223,16 +232,16 @@ if(isset($_SESSION["User"]))
     <div class="container">
       <div class="row">
         <div class="col-xl-9 mx-auto">
-          <h2 class="mb-4">Comienza creando una cuenta</h2>
+          <h2 class="mb-4">¡Crea una cuenta con tu email o whatsapp!</h2>
         </div>
         <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
           <form>
             <div class="form-row">
               <div class="col-12 col-md-9 mb-2 mb-md-0">
-                <input type="email" class="form-control form-control-lg" placeholder="Escribe tu email..." disabled="disabled">
+                <input type="email" class="form-control form-control-lg" placeholder="Escribe tu email..." name="txt-email" id="txt-email">
               </div>
               <div class="col-12 col-md-3">
-                <button type="submit" class="btn btn-block btn-lg btn-primary" disabled="disabled">Comenzar</button>
+                <button type="button" class="btn btn-block btn-lg btn-primary" id="buton-solicitarprueba" name="buton-solicitarprueba">¡Crear cuenta YA!</button>
               </div>
             </div>
           </form>
@@ -263,7 +272,7 @@ if(isset($_SESSION["User"]))
               <a href="#">Política de uso de datos</a>
             </li>
           </ul>
-          <p class="text-muted small mb-4 mb-lg-0">&copy; mistareas.com.mx 2019. Todos los derechos reservados.</p>
+          <p class="text-muted small mb-4 mb-lg-0">&copy; mistareas.com.mx 2020. Todos los derechos reservados.</p>
         </div>
         <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
           
@@ -292,9 +301,7 @@ if(isset($_SESSION["User"]))
     </div>
   </footer>
 
-  <!-- Bootstrap core JavaScript -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  
 
 </body>
 

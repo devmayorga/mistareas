@@ -73,7 +73,7 @@ elseif (! ( isset($_POST["txt_user"]) && isset($_POST["txt_pass"]) && isset($_PO
 		</table>
 		El Uso de esta aplicacion es entera responsabilidad del Usuario. La Página esta sujeta a cambios sin previo aviso.
 		<br />
-		mistareas.com.mx 2019 - Todos los Derechos reservados
+		mistareas.com.mx 2020 - Todos los Derechos reservados
 	</div>
 	
 	<?php

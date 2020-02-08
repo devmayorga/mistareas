@@ -269,7 +269,11 @@ function Partial($partialToRender, $Model, $css_class)
 							<li class="nav-item" >
 							  <a class="nav-link" href="user_connections.php">Conexiones</a>
 							</li>
+							
+							
 							<?php
+								
+								
 								if( $Model->HasUserCreate() )
 								{
 									?>
@@ -291,7 +295,7 @@ function Partial($partialToRender, $Model, $css_class)
 								  <li class="nav-item" ><a  class="nav-link" href="teams.php">Equipos</a></li>
 								  <?php
 								  */
-							  }
+							  }							
 						  ?>
 						  
 						  <?php
@@ -323,6 +327,18 @@ function Partial($partialToRender, $Model, $css_class)
 						</ul>
 					  
 						<?php
+
+						if( $Model->Type==2 )
+						{
+							
+							?>
+							<div style="text-align:left;">
+							<link rel="stylesheet" type="text/css" href="Partials.css">
+							<a class="nav-link " style="width: 200px; color: #007bff;width:200;border:1px solid red; background-color:black;animation: blinker 5s ease infinite;" target="_blank" href="https://josemayorga.com">..::JOSEMAYORGA.COM::..</a>
+							</div>
+							<?php
+						}
+
 					}
 					
 					?>
@@ -331,22 +347,64 @@ function Partial($partialToRender, $Model, $css_class)
 				  </div>
 				</div>
 				<div class="collapse navbar-collapse" id="navbarResponsive" style="/*border:1px solid red;*/">
-					<ul class="navbar-nav ml-auto" >
+					<ul class="navbar-nav ml-left" style="/*border:1px solid red; */width: 200px;" >
 					<li class="nav-item">
 							<p>
 							<small>
 						Bienvenido <b><?php echo$Model->ArtistName ;  ?></b>
 							<br>User Id: <b><?php  echo $Model->Id ;   ?></b>
-							<br> Tipo de cuenta: <b><?php echo $Model->Type == 2 ? "BÁSICA" : "COMPLETA" ; ?></b> 
-							<br >
+							<br> Versión del sistema: <b><?php echo $Model->Type == 2 ? "Basic" : "Pro" ; ?></b> 
+							
 							<?php
 								if( $Model->Type==2 )
 								{
 									?>
 									
-									  <a class="nav-link" href="user_upgrade.php?uid=<?php echo $Model->Id ; ?>">ACTIVAR CUENTA COMPLETA</a>
+									  <a class="nav-link " style="color: #007bff;width:200;border:1px solid red;" href="user_upgrade.php?uid=<?php echo $Model->Id ; ?>">Versión Pro sin publicidad</a>
 									
 									<?php
+								}
+								else
+								{
+									include_once("HtmlHelper.php");
+									$hoy =  strtotime(HtmlHelper::getHoraServidor());
+									//echo "*". $hoy ."*" . ":" . HtmlHelper::getHoraServidor();
+									$finLicencia = strtotime($Model->Licencia->EndDate);
+									//echo "*". $finLicencia ."*" . $Model->Licencia->EndDate;
+									//echo "*". time($finLicencia) < time($hoy) ."*";
+									if($finLicencia > $hoy )
+									{
+										$licenciaValida = 1;
+									}
+									else
+									{
+										$licenciaValida = 0;
+									}
+									//$licenciaValida = ($hoy > $finLicencia );
+									//echo "***". $licenciaValida ."***";
+									if($licenciaValida == 0
+									//|| true
+									)
+									{
+										$Model->Licencia->ExpirarLicencia();
+									}
+
+
+
+
+									?>
+									<br> Licencia expira en: <b><?php echo  $Model->Licencia->EndDate == null ? '01-jan-2050': date("d-M-Y", strtotime($Model->Licencia->EndDate )); ?></b> 
+									<?php
+									if( ! $Model->Licencia->Activa )
+									{
+										?>
+									
+									  <a class="nav-link " style="color: #007bff;width:200;border:1px solid red;" href="user_upgrade.php?uid=<?php echo $Model->Id ; ?>">Versión Pro sin publicidad</a>
+									
+									<?php
+									}
+
+
 								}
 							?>
 							</small>
@@ -393,7 +451,7 @@ function Partial($partialToRender, $Model, $css_class)
 						  <a href="#">Política de uso de datos</a>
 						</li>
 					  </ul>
-				  <p class="m-0 text-center text-white">&copy; mistareas.com.mx 2019. Todos los derechos reservados.</p>
+				  <p class="m-0 text-center text-white">&copy; mistareas.com.mx 2020. Todos los derechos reservados.</p>
 				</div>
 				<!-- /.container -->
 			  </footer>

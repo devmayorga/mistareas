@@ -28,21 +28,24 @@ else
 				?>
 				CODIGO VÁLIDO!. 
 				<br />
-				LOS CAMBIOS SE PODRÁN VER LA PRÓXIMA VEZ QUE INICIE SESIÓN.
+				
 				<?php
 				include_once("HtmlHelper.php");
-				HtmlHelper::renderBackButton("SALIR", "utils/auth/logout.php");
+				HtmlHelper::renderBackButton("IR AL SISTEMA", "home.php");
 				die();
-				?>
-				<a href="home.php">Inicio</a>
-				<?php
 			}
 			else
 			{
 				?>
 				CODIGO NO VÁLIDO!
 				<br />
-				<a href="user_upgrade.php?uid=<?php echo $_POST["uid"] ; ?>">Intentar de nuevo</a>
+				<?php
+				include_once("HtmlHelper.php");
+
+				$url = 'user_upgrade.php?uid='. $_POST["uid"] ;
+				HtmlHelper::renderBackButton("Volver", $url);
+				?>
+				
 				<?php
 			}
 		}

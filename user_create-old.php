@@ -1,6 +1,6 @@
 
 <?php
-include("db/dal.php");
+include_once("db/dal.php");
 if($Model->User->Type != 1)
 {
 	?>
@@ -89,7 +89,7 @@ else
 				<p>
 				Id para asignar tareas: [<?php echo $User["id"]?>] 
 				<br>
-				Nombre de usuario: [<?php echo $User["username"]?>]
+				Nombre de usuario: [<?php echo $User["artistname"]?>]
 				</p>
 				</div>
 				<br>
@@ -105,7 +105,7 @@ else
 				?>
 				<div class="alert alert-warning">
 				
-				<h4>EL USUARIO [<b><?php echo $username ; ?></b>] YA EXISTE! NO SE PUEDE DUPLICAR!</h4>
+				<h4>EL USUARIO [<b><?php echo $artistname ; ?></b>] YA EXISTE! NO SE PUEDE DUPLICAR!</h4>
 				
 				</div>
 				<br>

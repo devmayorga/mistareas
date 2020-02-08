@@ -106,9 +106,7 @@ class Dal
 		try
 		{
 			mysqli_begin_transaction($this->con);
-			// $sql = "insert into r_task_user (taskid, userid) values ('". $taskid  ."', '". $userid ."')";
 			$sql = " CALL `sp_upgradeUser`('". $userid ."', '". $upgradeCode ."');";
-			// die($sql);
 			$res = mysqli_query($this->con, $sql);
 			$row = mysqli_fetch_assoc($res);
 			$upgradeStatus = $row["UpgradeSuccess"];
@@ -393,9 +391,7 @@ class Dal
 		try
 		{
 			mysqli_begin_transaction($this->con);
-			// $sql = "insert into r_task_user (taskid, userid) values ('". $taskid  ."', '". $userid ."')";
 			$sql = " CALL `sp_getTaskDocuments`('". $taskid ."');";
-			// die($sql);
 			$res = mysqli_query($this->con, $sql) or die ("Error in method ". $method ."... MySQL dice: " . mysqli_error($this->con) );
 			mysqli_commit($this->con);
 			while($row = mysqli_fetch_assoc($res))
@@ -431,9 +427,7 @@ class Dal
 		try
 		{
 			mysqli_begin_transaction($this->con);
-			// $sql = "insert into r_task_user (taskid, userid) values ('". $taskid  ."', '". $userid ."')";
 			$sql = " CALL `sp_getAssignedUsers`('". $taskid ."');";
-			// die($sql);
 			$res = mysqli_query($this->con, $sql);
 			mysqli_commit($this->con);
 			while($row = mysqli_fetch_assoc($res))
@@ -785,7 +779,6 @@ class Dal
 		try
 		{
 			mysqli_begin_transaction($this->con);
-			// $sql = "insert into r_task_user (taskid, userid) values ('". $taskid  ."', '". $userid ."')";
 			$sql = " CALL `sp_desasignarTarea`(". $taskid .", ". $userid .");" or die ("Error in method ". $method ."... MySQL dice: " . mysqli_error($this->con) );
 			$res = mysqli_query($this->con, $sql);
 			mysqli_commit($this->con);
@@ -820,6 +813,90 @@ class Dal
 			return false ;
 		}
 	}	
+
+
+	function getUserLicencia($userid)
+	{
+		include_once("Licencia.php");
+		$method = "Dal.getUserLicencia";
+		try
+		{
+			
+			$sql1 = "select licencia_id, startdate, enddate from licencia where user_id = " . $userid; 
+			
+			$res = mysqli_query($this->con, $sql1);
+			$row = mysqli_fetch_assoc($res);
+			$licencia = new Licencia($row["licencia_id"]);
+			$licencia->StartDate=$row["startdate"];
+			$licencia->EndDate=$row["enddate"];
+			return $licencia ;
+		}
+		catch (Exception $e) 
+		{
+			return null ;
+		}
+	}
+
+	function getLicencia($idLicencia)
+	{
+		include_once("Licencia.php");
+		$method = "Dal.getUserLicencia";
+		try
+		{
+			
+			$sql1 = "select licencia_id, startdate, enddate from licencia where licencia_id = " . $idLicencia; 
+			
+			$res = mysqli_query($this->con, $sql1);
+			$row = mysqli_fetch_assoc($res);
+			$licencia = new Licencia($idLicencia);
+			$licencia->StartDate=$row["startdate"];
+			$licencia->EndDate=$row["enddate"];
+			return $licencia ;
+		}
+		catch (Exception $e) 
+		{
+			return null ;
+		}
+	}
+
+	function caducarLicencia($idLicencia)
+	{
+		include_once("Licencia.php");
+		$method = "Dal.getUserLicencia";
+		try
+		{
+			
+			$sql1 = "select licencia_id, startdate, enddate from licencia where licencia_id = " . $idLicencia; 
+			
+			$res = mysqli_query($this->con, $sql1);
+			$row = mysqli_fetch_assoc($res);
+			$licencia = new Licencia($idLicencia);
+			$licencia->StartDate=$row["startdate"];
+			$licencia->EndDate=$row["enddate"];
+			return $licencia ;
+		}
+		catch (Exception $e) 
+		{
+			return null ;
+		}
+	}
+
+
+	function createUsuarioDePrueba($NuevoUser)
+	{
+		include_once("User.php");
+		include_once("db/dal.php");
+		$pass = "simple";
+
+		$User = createUser(md5($NuevoUser->Email), md5($pass), $NuevoUser->Email, $NuevoUser->Email);
+		$NuevoUser->Id = $User["id"] ;
+		$NuevoUser->Name = $User["username"] ; 
+		$NuevoUser->Email = $User["email"] ;
+		$NuevoUser->Type = 2 ;
+		$NuevoUser->ArtistName = $User["artistname"] ; 
+		return $NuevoUser;
+		
+	}
 	
 	
 

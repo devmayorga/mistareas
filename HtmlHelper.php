@@ -27,6 +27,12 @@ class HtmlHelper
 		
 	
 	}
+
+	static public function getHoraServidor()
+	{
+		include_once("db/dal.php");
+		return getHoraServidor();
+	}
 	
 	
 }

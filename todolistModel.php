@@ -27,6 +27,9 @@ class todolistModel{
 		$this->Dal->Close();
 		$this->Dal = new Dal();
 		$this->User->SolicitudesRecibidas = $this->Dal->getUserSolicitudes($this->User->Id, "Recibidas");
+		$this->Dal->Close();
+		$this->Dal = new Dal();
+		$this->User->Licencia = $this->Dal->getUserLicencia($this->User->Id);
 		}
 		catch (Exception $e)
 		{
