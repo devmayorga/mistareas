@@ -21,7 +21,7 @@ class task_displayModel{
 			echo "Error en Los Apoyos Digitales";
 		}
 		
-		$this->Documents = $this->retrieveDocuments();
+		$this->Documents = $this->retrieveDocuments();		
 	}
 	
 	function retrieveTaskOwner()

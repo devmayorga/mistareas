@@ -16,6 +16,7 @@ function authenticateUser($strUsername, $strPassword)
 		, artistname
 		from user where username = '". md5($strUsername) ."' 
 		and password = '". md5($strPassword). "' " ;
+	//die($sql);
 	$res = mysqli_query($con,$sql) or die ("Error al autenticar usuario... MySQL dice: " . mysqli_error($con) );
 	$row = mysqli_fetch_assoc($res);
 	$User["username"] = $row["username"];

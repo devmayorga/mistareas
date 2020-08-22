@@ -1,6 +1,14 @@
 <?php
 session_start();
-//
+if(!isset($_SESSION["User"]))
+{	
+	$userid = 0 ; 
+	?>
+	<script language="javascript">
+	window.location.href="sesionExpirada.php";
+	</script>
+	<?php
+}
 include_once("todolistModel.php");
 include_once("Partials.php");
 $Model = new todolistModel($_SESSION["User"]["id"]);

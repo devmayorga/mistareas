@@ -9,9 +9,9 @@ class Config{
 	function __construct()
 	{
 		$this->User = "root" ;
-		$this->Password = "" ;
+		$this->Password = "root" ;
 		$this->Host = "localhost" ;
-		$this->Database = "todolist" ;
+		$this->Database = "mistareas" ;
 	}
 }
 

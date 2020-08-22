@@ -10,7 +10,8 @@ class Document
 	public $r_task_user_id ; 
 	public $Url ; 
 	public $UploadedBy ; 
-	public $Comment ; 
+	public $Comment ;	 
+	public $Nature ; 
 	
 	function __construct($p_id
 		, $p_rowdate = ""
@@ -34,5 +35,7 @@ class Document
 		}
 	
 }
+
+
 
 ?>

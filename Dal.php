@@ -345,6 +345,25 @@ class Dal
 			$p = new Project($row["id"], $row["name"]);
 			$projects[] = $p;
 		}
+
+
+		$sql = " select projectid as id 
+				, p.name as name
+				from r_project_user as rpu
+				inner join project as p on  rpu.projectid = p.id
+				where rpu.userid = " . $p_userid ;
+		// $res = mysqli_query($this->con,$sql) or die ("Error al leer los Proyectos de la BD... MySQL dice: " . mysqli_error($this->con));
+		$res = mysqli_query($this->con,$sql) ;
+		if (!$res)
+		{
+			throw new Exception('SesionExpiradaException');
+		}
+		while($row = mysqli_fetch_assoc($res))
+		{
+			$p = new Project($row["id"], $row["name"]);
+			$projects[] = $p;
+		}
+
 		return $projects ;
 	}
 	
@@ -394,6 +413,8 @@ class Dal
 			$sql = " CALL `sp_getTaskDocuments`('". $taskid ."');";
 			$res = mysqli_query($this->con, $sql) or die ("Error in method ". $method ."... MySQL dice: " . mysqli_error($this->con) );
 			mysqli_commit($this->con);
+			$this->Close();
+			
 			while($row = mysqli_fetch_assoc($res))
 			{
 				$Document = new Document(
@@ -406,9 +427,70 @@ class Dal
 					, $row["UploadedBy"]
 					, $row["Comment"]
 					);
+				$this->Open();
+				$Document->Nature = $this->getDocumentNature($Document->Id);
+				$this->Close();
 				$Documents[] = $Document;
 			}
 			return $Documents ; 
+		}
+		catch (Exception $e) 
+		{
+			mysqli_rollback($this->con);
+			return false ;
+		}
+		
+	}
+
+	// - - - ! 2020-06-26
+	function getDocumentNatures()
+	{
+		$DocumentNatures = null ;
+		include_once("DocumentNature.php");
+		$method = "Dal.getDocumentNatures";
+		try
+		{
+			mysqli_begin_transaction($this->con);
+			$sql = " CALL `sp_getDocumentNatures`();";
+			$res = mysqli_query($this->con, $sql) or die ("Error in method ". $method ."... MySQL dice: " . mysqli_error($this->con) );
+			mysqli_commit($this->con);
+			while($row = mysqli_fetch_assoc($res))
+			{
+				$DocumentNature = new DocumentNature(
+					 $row["nature_id"]
+					, $row["nature_name"]					
+					);
+				$DocumentNatures[] = $DocumentNature;
+			}
+			return $DocumentNatures ; 
+		}
+		catch (Exception $e) 
+		{
+			mysqli_rollback($this->con);
+			return false ;
+		}
+		
+	}
+	// - - - ! 2020-06-26
+	function getDocumentNature($p_document_id = 0)
+	{		
+		include_once("DocumentNature.php");
+		$method = "Dal.getDocumentNature";
+		try
+		{
+			mysqli_begin_transaction($this->con);
+			$sql = " CALL `sp_getDocumentNature`('". $p_document_id ."');";
+			$res = mysqli_query($this->con, $sql) or die ("Error in method ". $method ."... MySQL dice: " . mysqli_error($this->con) );
+			mysqli_commit($this->con);
+			$row = mysqli_fetch_assoc($res);
+			
+			$DocumentNature = new DocumentNature(
+					$row["nature_id"]
+				, $row["nature_name"]					
+				);
+			
+			
+			return $DocumentNature ; 
 		}
 		catch (Exception $e) 
 		{
@@ -437,6 +519,7 @@ class Dal
 					 , $row["username"]
 					);
 				$Users[] = $User ; 
+				$User->ArtistName =  $row["artistname"] ;
 				
 			}
 			return $Users ; 
@@ -515,10 +598,10 @@ class Dal
 			mysqli_rollback($this->con);
 			$Features[] = new Feature();
 		}
-		finally
-		{
+		// finally
+		// {
 			return $Features ;
-		}
+		// }
 		
 	}
 	
@@ -555,10 +638,10 @@ class Dal
 			mysqli_rollback($this->con);
 			$Friends[] = new User();
 		}
-		finally
-		{
+		// finally
+		// {
 			return $Friends ;
-		}
+		// }
 		
 	} // fin getUserFriends
 	
@@ -641,10 +724,10 @@ class Dal
 			mysqli_rollback($this->con);
 			$Friends[] = new User();
 		}
-		finally
-		{
+		// finally
+		// {
 			return $Friends ;
-		}
+		// }
 		
 	} // fin getUserSolicitudes// 25-09-2019
 	// JM - Created for Ivan to test the Plattform and isolate his users from mines
@@ -825,16 +908,30 @@ class Dal
 			$sql1 = "select licencia_id, startdate, enddate from licencia where user_id = " . $userid; 
 			
 			$res = mysqli_query($this->con, $sql1);
-			$row = mysqli_fetch_assoc($res);
-			$licencia = new Licencia($row["licencia_id"]);
-			$licencia->StartDate=$row["startdate"];
-			$licencia->EndDate=$row["enddate"];
-			return $licencia ;
+
+			if(mysqli_num_rows($res) > 0)
+			{
+				$row = mysqli_fetch_assoc($res);
+				$licencia = new Licencia($row["licencia_id"]);
+				$licencia->StartDate=$row["startdate"];
+				$licencia->EndDate=$row["enddate"];
+			}
+			else
+			{
+				$licencia = new Licencia(0);
+				$licencia->StartDate=date("Ymd");
+				$licencia->EndDate=date("Ymd");
+
+			}
+			
+			
 		}
 		catch (Exception $e) 
 		{
-			return null ;
+			$licencia = null ;
 		}
+
+		return $licencia ;
 	}
 
 	function getLicencia($idLicencia)

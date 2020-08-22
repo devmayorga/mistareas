@@ -8,6 +8,11 @@ session_start();
 if(!isset($_SESSION["User"]))
 {	
 	$userid = 0 ; 
+	?>
+	<script language="javascript">
+	window.location.href="sesionExpirada.php";
+	</script>
+	<?php
 }
 else
 {
@@ -75,7 +80,7 @@ else
 
 <body>
 	
-	<div id="loading">
+	<div id="loading" class="containter mt-5" style="text-align:center;">
 		<img src="img/giphy.gif" />
 	</div>
 	<script language="javascript">

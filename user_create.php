@@ -7,7 +7,11 @@ session_start();
 //
 if(!isset($_SESSION["User"]))
 {	
-	$userid = 0 ; 
+	?>
+	<script language="javascript">
+	window.location.href="sesionExpirada.php";
+	</script>
+	<?php
 }
 else
 {

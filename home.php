@@ -1,6 +1,14 @@
 <?php
 session_start();
-//
+if(!isset($_SESSION["User"]))
+{	
+	$userid = 0 ; 
+	?>
+	<script language="javascript">
+	window.location.href="sesionExpirada.php";
+	</script>
+	<?php
+}
 include_once("todolistModel.php");
 include_once("Partials.php");
 $Model = new todolistModel($_SESSION["User"]["id"]);
@@ -71,9 +79,9 @@ else
 </head>
 
 <body>
-	<div class="container" id="loading" >
+	<div class="container mt-5  " id="loading" style="/*border:1px solid red ;*/ text-align:center;" >
 	
-			<img src="img/giphy.gif" />
+			<img src="img/giphy.gif" style="text-align:center;"/>
 		</div>
 		
 		<script language="javascript">
@@ -92,7 +100,7 @@ else
   ?>
 
   <!-- Page Content -->
-  <div class="container" id="content" style="display:none;">
+  <div class="container mt-5" id="content" style="display:none;">
 
     <!-- Page Heading/Breadcrumbs -->
 	
@@ -100,7 +108,7 @@ else
 	<br />
 	<br />
 	
-    <h1 class="mt-4 mb-3 text-center">
+    <h1 class="mt-5 mb-3 text-center">
 		PROYECTOS 
       <small>
 	  
@@ -266,7 +274,7 @@ $(document).ready(function(){
 	/****************************************************/
 	
 	<?php
-	$actions = ["delete", "edit", "add","addproject", "hide", "logout", "chrono", "aula", "menuproject", "home"];
+	$actions = array("delete", "edit", "add","addproject", "hide", "logout", "chrono", "aula", "menuproject", "home");
 	foreach($actions as $action)
 	{
 		?>

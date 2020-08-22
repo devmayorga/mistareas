@@ -46,7 +46,7 @@ if(!empty($_GET["p"]))
 	?>
  
   <!-- Page Content -->
-  <div class="container">
+  <div class="container mt-5">
 	<br />
 	<br />
     
@@ -102,9 +102,9 @@ if(!empty($_GET["p"]))
 							  <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
 							  -->
 							  <div class="card-body">
-								<h4 class="card-title">
+								<!-- <h4 class="card-title">
 								  BORRAR
-								</h4>
+								</h4> -->
 								<p class="card-text" >
 									<a href="project_delete.php?p=<?php echo $Model->Project->Id ;?>"><img   class="img-delete"  src="img/delete-color.png"></a>							
 								</p>
@@ -119,9 +119,9 @@ if(!empty($_GET["p"]))
 							  <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
 							  -->
 							  <div class="card-body">
-								<h4 class="card-title">
+								<!-- <h4 class="card-title">
 								  VOLVER
-								</h4>
+								</h4> -->
 								<p class="card-text" >
 									
 									<?php

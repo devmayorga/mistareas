@@ -5,6 +5,7 @@ include_once("Dal.php");
 class subirarchivosModel{
 	public $User ;
 	private $Dal ;
+	public $DocumentNatures ;
 	
 	function __construct($p_userid)
 	{
@@ -15,6 +16,7 @@ class subirarchivosModel{
 		$this->Dal->Close();
 		$this->Dal = new Dal();
 		$this->User->Licencia = $this->Dal->getUserLicencia($this->User->Id);
+		$this->DocumentNatures = $this->Dal->getDocumentNatures();
 		}
 		catch (Exception $e)
 		{

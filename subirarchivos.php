@@ -1,5 +1,14 @@
 <?php
 session_start();
+if(!isset($_SESSION["User"]))
+{	
+	$userid = 0 ; 
+	?>
+	<script language="javascript">
+	window.location.href="sesionExpirada.php";
+	</script>
+	<?php
+}
 include_once("Partials.php");
 include_once("subirarchivosModel.php");
 include_once('db/dal.php');
@@ -14,6 +23,7 @@ if(isset($_POST["enviar"]))
 				$model["patient"]["id"] = $_POST["userid"] ;
 				$model["documentType"] = $_POST["documentType"];
 				$model["surgery"]["id"] = $_POST["taskid"];
+				$model["nature"] = $_POST["nature"];
 				$_GET["uid"] = $_POST["userid"];
 				$_GET["task"] = $_POST["taskid"] ;
 				$_GET["type"] = $_POST["documentType"] ;
@@ -75,11 +85,12 @@ if(isset($_POST["enviar"]))
 								//echo $output ; $output = "" ;
 								include_once("Dal.php");
 								$Dal = new Dal();
-								$sql2 = "insert into document (url, type, taskid, uploadedBy) values ('"
+								$sql2 = "insert into document (url, type, taskid, uploadedBy, r_document_nature) values ('"
 									. $filename 
 									."', ". $type 
 									.", ". $model["surgery"]["id"] 
 									.", ". $model["patient"]["id"]
+									.", ". $model["nature"]
 									.")";
 								$res2 = mysqli_query($Dal->con, $sql2) or die ("Error al registrar el documento en el Sistema: " . $filename . "... Mensaje del sistema: " . mysqli_error($Dal->$con));
 								// $output .= "<br />El archivo " . $filename ." se ha registrado correctamente en el Sistema!";
@@ -222,11 +233,24 @@ $currentType = $documentTypes[$_GET["type"]];
 			case "1":
 			case "2":
 			case "3":
-			for($i = 1 ; $i < 6; $i++)
+			for($i = 1 ; $i < 2; $i++)
 			{
 				?>
+				<label for="nature">Seleccione el tipo de recurso:</label>
+				<select id="nature" name="nature">
+					<?php
+					foreach($Model->DocumentNatures as $nature)
+					{
+						?>
+						<option value="<?php echo $nature->Id ; ?>"><?php echo $nature->Name  == "Undefined" ? "Sin definir" : $nature->Name ; ?></option>
+						<?php
+					}
+					?>
+				</select>
+				<br />
 				<label for="file">Seleccione un archivo:</label>
 				<input type="file" name="filetoupload<?php echo $i ; ?>" id="file<?php echo $i ; ?>"><br />
+				
 				<?php
 			}
 			break;

@@ -35,10 +35,10 @@ class todolistModel{
 		{
 			echo "todolistModel Catched the Exception";
 		}
-		finally
-		{
+		// finally
+		// {
 			$this->Dal->Close();
-		}
+		// }
 		
 	}
 }

@@ -64,7 +64,7 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
 							
 							echo "<br /><a href='content/documents/tasks/". $Model2->Task->Id ."/". $document->Url 
 							."'>" 
-							. "Recurso Académico " . $j 
+							. "Recurso Académico " . $j   .  ( $document->Nature->Name == "Undefined" ? "" : "(" . $document->Nature->Name . ")" ) 
 							//. $document->Url 
 							. "</a>"
 							. $deleteString; 

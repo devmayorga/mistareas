@@ -47,6 +47,7 @@ function Partial($partialToRender, $Model, $css_class)
 			session_start();
 			//
 			include_once("todolistModel.php");
+			
 			$Model = new todolistModel($_SESSION["User"]["id"]);
 			/*A estas alturas del partido. Si el Usuario no tiene Id es porque caducó la sesion.*/
 			if(strlen($Model->User->Name) < 1)
@@ -351,7 +352,7 @@ function Partial($partialToRender, $Model, $css_class)
 					<li class="nav-item">
 							<p>
 							<small>
-						Bienvenido <b><?php echo$Model->ArtistName ;  ?></b>
+						Bienvenido <b><?php echo $Model->ArtistName ;  ?></b>
 							<br>User Id: <b><?php  echo $Model->Id ;   ?></b>
 							<br> Versión del sistema: <b><?php echo $Model->Type == 2 ? "Basic" : "Pro" ; ?></b> 
 							
@@ -740,8 +741,8 @@ function Partial($partialToRender, $Model, $css_class)
 			</h1>
 			<?php
 			
-			$actions = ["home",  "help", "menuproject","addproject", "add","left" ,"delete", "edit", "hide", "chrono", "aula", "share", "transfer", "logout"];
-			$descriptions = ["Inicio",  "AYUDA", "Mostrar/Ocultar Proyectos","Agregar Proyecto", "Agregar Tarea","Mostrar/ocultar Acciones","Borrar", "Renombrar", "Ocultar formulario", "FUNCIONES DE TIEMPO", "APOYOS DIGITALES","Asignar a otro Usuario", "Transferir de Proyecto", "Salir"];
+			$actions = array("home",  "help", "menuproject","addproject", "add","left" ,"delete", "edit", "hide", "chrono", "aula", "share", "transfer", "logout");
+			$descriptions = array("Inicio",  "AYUDA", "Mostrar/Ocultar Proyectos","Agregar Proyecto", "Agregar Tarea","Mostrar/ocultar Acciones","Borrar", "Renombrar", "Ocultar formulario", "FUNCIONES DE TIEMPO", "APOYOS DIGITALES","Asignar a otro Usuario", "Transferir de Proyecto", "Salir");
 			$i = 0 ;
 			foreach($actions as $action)
 			{				
@@ -1038,7 +1039,7 @@ function renderPartialUsuariosAsignados($Model)
 					foreach($Model->Users as $User)
 					{
 						?>
-						<li><?php echo $User->Id ; ?> - <b><?php echo $User->Name ; ?></b><span class="btn-warning task-unassign" ref1="<?php echo $User->Id ; ?>" ref2="<?php echo $Model->Task->Id ; ?>" style="cursor:pointer;">[X]</span></li>
+						<li><?php echo $User->Id ; ?> - <b><?php echo $User->ArtistName ; ?></b><span class="btn-warning task-unassign" ref1="<?php echo $User->Id ; ?>" ref2="<?php echo $Model->Task->Id ; ?>" style="cursor:pointer;">[X]</span></li>
 						<?php
 					}
 					?>

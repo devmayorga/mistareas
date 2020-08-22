@@ -1,4 +1,7 @@
 <?php
+include_once("userController.php");
+$userController = new userController();
+$userController->verificarSesion();
 include_once("Partials.php");
 ?>
 <!DOCTYPE html>
