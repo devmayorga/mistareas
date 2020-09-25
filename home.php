@@ -259,9 +259,9 @@ function activateTaskItemActions()
 	
 
 $(document).ready(function(){
-	$("#content").hide();
+	// $("#content").hide();
 	
-	setTimeout(hideLoader, 1 * 1000);
+	hideLoader();
 
 	$('#description').focus();
 	

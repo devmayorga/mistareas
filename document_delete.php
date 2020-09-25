@@ -49,7 +49,7 @@ if(!empty($_GET["p"]))
     <!-- Page Content -->
     <div class="container">
         <br />
-        <br />
+        <br /><br /><br /><br /><br /><br /><br />
 
 
 
@@ -61,7 +61,7 @@ if(!empty($_GET["p"]))
         if($renderFirstTime){
 
         ?>
-        <p>
+        <p class="mt-5">
             <h2>
                 Borrando Documento: <small>" <?php echo $Model->Document->Url ; ?> "</small>.
                 <h2>

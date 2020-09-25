@@ -7,6 +7,7 @@ class task_displayModel{
 	public $User ; 
 	public $Documents ;
 	public $TaskOwner ;
+	public $DocumentNatures ;
 	function __construct($taskid, $userid)
 	{
 		include_once("Dal.php");
@@ -21,7 +22,10 @@ class task_displayModel{
 			echo "Error en Los Apoyos Digitales";
 		}
 		
-		$this->Documents = $this->retrieveDocuments();		
+		$this->Documents = $this->retrieveDocuments();
+		$this->Dal->Close();
+		$this->Dal = new Dal();		
+		$this->DocumentNatures = $this->Dal->getDocumentNatures();
 	}
 	
 	function retrieveTaskOwner()
@@ -34,7 +38,6 @@ class task_displayModel{
 		$this->TaskOwner = $this->retrieveTaskOwner();
 		return $this->Dal->getTaskDocuments($this->Task->Id);
 	}
-	
 	
 }
 ?>

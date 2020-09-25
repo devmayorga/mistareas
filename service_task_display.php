@@ -47,31 +47,93 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
 				if(!empty($Model2->Documents))
 				{
 					$j=0;
-					foreach($Model2->Documents as $document)
+					foreach($Model2->DocumentNatures as $Nature)
 					{
-						if($document->Type == $documentoAcademico)
+						// echo "<br />" . $Nature->Name ;
+						$k=0;
+						$listaConHeader = "";
+						// if($Nature->Name == "Imagen")
+						// {
+						// 	$listaConHeader = '<div class="row" id="gallery" data-toggle="modal" data-target="#exampleModal" >';
+						// }
+						$contadorDeImagenes = 0 ;
+						foreach($Model2->Documents as $document)
 						{
-							$j++;
-							$deleteString = "" ; 
-							if($Model2->User->Id == $Model2->TaskOwner)
-							{
-								$deleteString = "<a href='document_delete.php"
-							."?p=". $document->Id 
-							."&document_name=". $document->Url 
-							."&project_id=". $Model2->Task->ProjectId  
-							. "'>[X]</a>" ;
-							}
 							
-							echo "<br /><a href='content/documents/tasks/". $Model2->Task->Id ."/". $document->Url 
-							."'>" 
-							. "Recurso Académico " . $j   .  ( $document->Nature->Name == "Undefined" ? "" : "(" . $document->Nature->Name . ")" ) 
-							//. $document->Url 
-							. "</a>"
-							. $deleteString; 
+							if($document->Type == $documentoAcademico
+							&& $document->Nature->Name == $Nature->Name
+							)
+							{
+								$j++;
+								$deleteString = "" ; 
+								if($Model2->User->Id == $Model2->TaskOwner)
+								{
+									$deleteString = "<a href='document_delete.php"
+									."?p=". $document->Id 
+									."&document_name=". $document->Url 
+									."&project_id=". $Model2->Task->ProjectId  
+									. "'>[X]</a>" ;
+								}
+								
+								// echo "<br /><a href='content/documents/tasks/". $Model2->Task->Id ."/". $document->Url 
+								// ."'>" 
+								// . "Recurso Académico " . $j   .  ( $document->Nature->Name == "Undefined" ? "" : "(" . $document->Nature->Name . ")" ) 
+								// //. $document->Url 
+								// . "</a>"
+								// . $deleteString; 
+								
+								
+								if($k==0)
+								{
+
+									$listaConHeader .= "<h5>". ( $document->Nature->Name == "Undefined" ? "Tipo sin definir" : $document->Nature->Name) ."</h5>";
+									if($Nature->Name == "Imagen")
+									{
+										$listaConHeader .= '<div class="row" id="gallery" data-toggle="modal" data-target="#exampleModal" >';
+									}
+									$k++;
+								}
+								
+								if($document->Nature->Name == "Imagen")
+								{
+									
+									// $listaConHeader = '<div class="row" id="gallery">';
+									$listaConHeader .= '<div class="col-12 col-sm-6 col-lg-3">'
+									.'<a href="content/documents/tasks/'. $Model2->Task->Id .'/'. $document->Url .'">'
+										.'<img '
+											.' class="w-100" '
+											.' src="content/documents/tasks/'. $Model2->Task->Id .'/'. $document->Url .'" '
+											.' data-target="#carouselExample" data-slide-to="'. $contadorDeImagenes .'"'
+										.'>'
+									.'</a>'
+									.'</div>';
+									$contadorDeImagenes++;
+									// $listaConHeader .= "<br />IMAGEN";
+								}
+								else
+								{
+									$listaConHeader .= "<a href='content/documents/tasks/". $Model2->Task->Id ."/". $document->Url 
+									."'>" 
+									. "Recurso Académico " . $j   .  ( $document->Nature->Name == "Undefined" ? "" : "(" . $document->Nature->Name . ")" ) 
+									//. $document->Url 
+									. "</a>"
+									. $deleteString;
+								}
+								
+							}
+							$i ++ ;						
 						}
-						$i ++ ;						
+						if($Nature->Name == "Imagen")
+						{
+							$listaConHeader .= '</div>';
+						}
+						if($k>0)
+						{
+							echo $listaConHeader;
+						}
+						
+
 					}
-				
 				}
 				else
 				{

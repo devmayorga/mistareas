@@ -559,7 +559,7 @@ function Partial($partialToRender, $Model, $css_class)
 				  <div class="card-body">
 					
 					<?php
-					include("service_task_display.php");
+					include_once("service_task_display.php");
 					?>
 					
 					

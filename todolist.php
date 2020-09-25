@@ -147,7 +147,7 @@ else
 		 } 
 	  ?>
 	  
-	  Proyectos
+	  <a href="home.php">Proyectos</a>
 	  
 	  <?php
 	 	if ( $currentProject->Id != -1 )
@@ -372,9 +372,9 @@ function activateTaskItemActions()
 	
 
 $(document).ready(function(){
-	$("#content").hide();
+	// $("#content").hide();
 	
-	setTimeout(hideLoader, 1 * 1000);
+	hideLoader();
 	$('#exampleModal').on('show.bs.modal', function (event) {
 	  var button = $(event.relatedTarget); // Button that triggered the modal
 	  var usuariosAsignables ;
