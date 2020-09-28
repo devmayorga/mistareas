@@ -136,30 +136,7 @@ else
         
       </li>
       <li class="breadcrumb-item ">
-	  
-	  <?php
-	 	if ( $currentProject->Id != -1 && $Model->User->Type != 1 )
-		 {
-			 ?>
-			 <a href="home.php">
-			 <!-- <img class="img-pdf" src="img/pdf-color.png" /> -->
-			 <?php
-		 } 
-	  ?>
-	  
-	  <a href="home.php">Proyectos</a>
-	  
-	  <?php
-	 	if ( $currentProject->Id != -1 )
-		 {
-			 ?>
-			 </a>
-			 <!-- <img class="img-pdf" src="img/pdf-color.png" /> -->
-			 <?php
-		 } 
-	  ?>
-	  
-	  
+	  	<a href="home.php">Proyectos</a>
 	  </li>
 	  <li class="breadcrumb-item active ">
 	  <?php
