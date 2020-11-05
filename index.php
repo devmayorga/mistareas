@@ -132,7 +132,7 @@ if(isset($_SESSION["User"]))
             <div class="features-icons-icon d-flex">
               <i class="icon-check m-auto text-primary"></i>
             </div>
-            <h3>Proyectos</h3>
+            <h3>Clases</h3>
             <p class="lead mb-0">Organiza, asigna y controla las tareas de tus proyectos y cumple tus objetivos a tiempo.</p>
           </div>
         </div>
@@ -167,29 +167,30 @@ if(isset($_SESSION["User"]))
 
         <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('img/project.jpeg');"></div>
         <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-          <h2>Proyectos y cursos</h2>
+          <h2>Desde cualquier parte del mundo sin que tengas que instalar la App</h2>
           <p class="lead mb-0">
-			Esta aplicación sirve para profesores, managers, secretarias, estudiantes, hogar... En fin para cualquier profesión y para cuaquier persona que 
-			quiera organizar un Objetivo a cumplir...
+			mistareas.com.mx es accesible desde cualquier parte del mundo y prácticamente cualquier dispositivo, incluyendo T.V., smart-device... y sin tener que instalar nada...
+      <br />
+      Tiene soporte para Escuelas y maestros independientes como creadores del contenido, y la audiencia podrían ser aprendices autodidactas o alumnos de alguna escuela registrada en la plataforma www.mistareas.com.mx
 		  </p>
         </div>
       </div>
       <div class="row no-gutters">
         <div class="col-lg-6 text-white showcase-img" style="background-image: url('img/task.png');"></div>
         <div class="col-lg-6 my-auto showcase-text">
-          <h2>Tareas</h2>
+          <h2>Documenta y comparte Clases, Cursos, Tareas, ...</h2>
           <p class="lead mb-0">
-			Organiza tu proyecto en pequeñas tareas a completar para que sea fácil alcanzar tus objetivos. Organiza tus cursos en temas para obtener mejores rendimientos.
+			Organiza tus Cursos en Clases para compartir con Grupos de Usuarios . Divide tus Clases en Tareas para obtener más niveles en la personalización de la enseñanza. Por ejemplo: A un alumno de cuarto grado le resulta sencillo aprender y comprende todo acerca de cierta asignatura mientras sus compañeros se tienen que esforzar más. Pues una manera de mantener de ese alumno motivado en su aprendizaje es que acceda a lecciones de quinto grado en esa materia en particular (aunque el alumno siga perteniciendo a cuarto grado). Aquí entra mistareas.com.mx como aliado en la enseñanza, pruébalo!
 		  </p>
         </div>
       </div>
       <div class="row no-gutters">
         <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('img/share.png');"></div>
         <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-          <h2>Documenta y comparte</h2>
+          <h2>Enseñanza 3.0 ... La Enseñanza sin límites... </h2>
           <p class="lead mb-0">
-			Guarda en la Nube los documentos de un proyecto, o los recursos para una clase y compártelos con tus contactos.
-		  </p>
+          Guarda en la Nube (o sea no en tu móvil o tu ordenador sino directo en la plataforma en internet) los Documentos de una Clase, o los Ejercicios recomendados para reforzar un tema y compártelos con tus contactos de manera individual o grupal. No importa si eres boomer o mil-lenial, si te interesean la auto-enseñanza-aprendizaje y la divulgación del conocimiento, www.mistareas.com.mx es tu herramienta. ¡Úsala!.
+          </p>
         </div>
       </div>
     </div>
@@ -198,13 +199,13 @@ if(isset($_SESSION["User"]))
   <!-- Testimonials 
   <section class="testimonials text-center bg-light">
     <div class="container">
-      <h2 class="mb-5">Proyectos recientes</h2>
+      <h2 class="mb-5">Clases recientes</h2>
       <div class="row">
         <div class="col-lg-4">
           <div class="testimonial-item mx-auto mb-5 mb-lg-0">
             <img class="img-fluid rounded-circle mb-3" src="img/testimonials-1.jpg" alt="">
             <h5>Ivan G.</h5>
-            <p class="font-weight-light mb-0">"Organizar mis Proyectos nunca fue tan fácil!"</p>
+            <p class="font-weight-light mb-0">"Organizar mis Clases nunca fue tan fácil!"</p>
           </div>
         </div>
         <div class="col-lg-4">

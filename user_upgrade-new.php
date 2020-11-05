@@ -164,7 +164,7 @@ $currentType = $documentTypes[$_GET["type"]];
       <li class="breadcrumb-item">
         
       </li>
-      <li class="breadcrumb-item "><a href="home.php">Proyectos</a></li>
+      <li class="breadcrumb-item "><a href="home.php">Clases</a></li>
 	  
       <li class="breadcrumb-item "><a href="todolist.php?p=<?php echo $Model->User->Type == 1 ?  $currentProject->Id  : -1 ; ?>"><?php echo $currentProject->Name ; ?></a></li>
       <li class="breadcrumb-item "><a href="todolist.php?p=<?php echo $Model->User->Type == 1 ?  $currentProject->Id  : -1 ; ?>&ariaExpanded=<?php echo $currentTask->Id ; ?>#ancla-task-<?php echo $currentTask->Id ; ?>"><?php echo $currentTask->Name  ; ?></a></li>

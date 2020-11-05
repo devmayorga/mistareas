@@ -101,8 +101,14 @@ function createUser($strUsername, $strPassword, $strArtistName, $strEmail = "tes
 		" ;
 	$res = mysqli_query($con,$sql) or die ("Error al autenticar usuario... MySQL dice: " . mysqli_error($con) );
 	$row = mysqli_fetch_assoc($res);
-	$User["username"] = $row["username"];
-	
+	if($row != null)
+	{
+		$User["username"] = $row["username"];
+	}
+	else
+	{
+		$User["username"] = "";
+	}
 	if(strlen($User["username"])> 0 )
 	{
 		$validuser = true;			
@@ -157,7 +163,7 @@ function createUser($strUsername, $strPassword, $strArtistName, $strEmail = "tes
 		if($User["validuser"])
 		{
 			$horaServidor = getHoraServidor();
-			$sql2= "insert into licencia ( upgradeCode, user_id, enddate, author) values ('". $strUsername ."', '". $User["id"] ."',date_add('". $horaServidor ."', INTERVAL 30 DAY) ,'ATOMIC')" ;		
+			$sql2= "insert into licencia ( upgradeCode, user_id, enddate, author) values ('". $strUsername ."', '". $User["id"] ."',date_add('". $horaServidor ."', INTERVAL 30 DAY) ,0)" ;		
 			$res2 = mysqli_query($con,$sql2) or die ("Error al insertar la licencia usuario... MySQL dice: " . mysqli_error($con) );
 			return $User;
 		}

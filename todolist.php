@@ -132,11 +132,45 @@ else
     </h1>
 
     <ol class="breadcrumb">
-      <li class="breadcrumb-item">
+		<li class="breadcrumb-item">
         
-      </li>
-      <li class="breadcrumb-item ">
-	  	<a href="home.php">Proyectos</a>
+		</li>
+		<?php
+		if($Model->User->Type==1)
+		{
+			?>
+			<li class="breadcrumb-item" >
+			<?php renderPartialLinkCursos() ; ?>
+			</li>
+			<?php
+		}							
+		?>
+      
+		<li class="breadcrumb-item ">
+		
+		<?php
+		if ( $currentProject->Id != -1 && $Model->User->Type != 1 )
+			{
+				?>
+				<a href="home.php">
+				<!-- <img class="img-pdf" src="img/pdf-color.png" /> -->
+				<?php
+			} 
+		?>
+	  
+	  <a href="home.php">Clases</a>
+	  
+	  <?php
+	 	if ( $currentProject->Id != -1 && $Model->User->Type != 1 )
+		 {
+			 ?>
+			 </a>
+			 <!-- <img class="img-pdf" src="img/pdf-color.png" /> -->
+			 <?php
+		 } 
+	  ?>
+	  
+	  
 	  </li>
 	  <li class="breadcrumb-item active ">
 	  <?php
@@ -349,9 +383,9 @@ function activateTaskItemActions()
 	
 
 $(document).ready(function(){
-	// $("#content").hide();
+	$("#content").hide();
 	
-	hideLoader();
+	setTimeout(hideLoader, 1 * 0);
 	$('#exampleModal').on('show.bs.modal', function (event) {
 	  var button = $(event.relatedTarget); // Button that triggered the modal
 	  var usuariosAsignables ;

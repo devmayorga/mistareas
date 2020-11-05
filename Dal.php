@@ -334,7 +334,7 @@ class Dal
 		$projects[] = new Project($virtualProjectId_AssignedTasks, "tareas asignadas", $p_userid) ;
 		$sql = "select id
 			, name from project where userid = " . $p_userid;
-		// $res = mysqli_query($this->con,$sql) or die ("Error al leer los Proyectos de la BD... MySQL dice: " . mysqli_error($this->con));
+		// $res = mysqli_query($this->con,$sql) or die ("Error al leer los Clases de la BD... MySQL dice: " . mysqli_error($this->con));
 		$res = mysqli_query($this->con,$sql) ;
 		if (!$res)
 		{
@@ -352,7 +352,7 @@ class Dal
 				from r_project_user as rpu
 				inner join project as p on  rpu.projectid = p.id
 				where rpu.userid = " . $p_userid ;
-		// $res = mysqli_query($this->con,$sql) or die ("Error al leer los Proyectos de la BD... MySQL dice: " . mysqli_error($this->con));
+		// $res = mysqli_query($this->con,$sql) or die ("Error al leer los Clases de la BD... MySQL dice: " . mysqli_error($this->con));
 		$res = mysqli_query($this->con,$sql) ;
 		if (!$res)
 		{
@@ -986,11 +986,14 @@ class Dal
 		$pass = "simple";
 
 		$User = createUser(md5($NuevoUser->Email), md5($pass), $NuevoUser->Email, $NuevoUser->Email);
-		$NuevoUser->Id = $User["id"] ;
-		$NuevoUser->Name = $User["username"] ; 
-		$NuevoUser->Email = $User["email"] ;
-		$NuevoUser->Type = 2 ;
-		$NuevoUser->ArtistName = $User["artistname"] ; 
+		if($User!=null)
+		{
+			$NuevoUser->Id = $User["id"] ;
+			$NuevoUser->Name = $User["username"] ; 
+			$NuevoUser->Email = $User["email"] ;
+			$NuevoUser->Type = 2 ;
+			$NuevoUser->ArtistName = $User["artistname"] ;
+		}
 		return $NuevoUser;
 		
 	}

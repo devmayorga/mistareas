@@ -235,13 +235,22 @@ function Partial($partialToRender, $Model, $css_class)
 						?>
 							<ul class="navbar-nav ml-left" >
 							
-							
+							<li class="nav-item" >
+								<?php
+								if($Model->Type==1)
+								{
+									renderPartialLinkCursos(true);
+								}
+								?>
+							  
+							</li>
+
 							<li class="nav-item" >
 								<?php
 								if($Model->Type==1)
 								{
 									?>
-									<a class="nav-link" href="home.php">Proyectos</a>
+									<a class="nav-link" href="home.php">Clases</a>
 									<?php
 								}
 								else
@@ -253,25 +262,9 @@ function Partial($partialToRender, $Model, $css_class)
 								?>
 							  
 							</li>
-
-							<?php
-								if($Model->Type==1)
-								{
-									?>
-									<li class="nav-item" >
-									<a class="nav-link" href="todolist.php?p=-1">Tareas asignadas</a>
-									</li>
-
-									<?php
-								}
-								
-								?>
-
 							<li class="nav-item" >
-							  <a class="nav-link" href="user_connections.php">Conexiones</a>
+							  <a class="nav-link" href="user_connections.php">Grupos</a>
 							</li>
-							
-							
 							<?php
 								
 								
@@ -285,45 +278,50 @@ function Partial($partialToRender, $Model, $css_class)
 								}
 							?>
 							
-						  <?php
-						  if(
+							<?php
+							if(
 							$Model->Type == 1
 							&& $Model->HasTeamCreate() 
 							)
-							  {
-								  /*
-								  ?>
-								  <li class="nav-item" ><a  class="nav-link" href="teams.php">Equipos</a></li>
-								  <?php
-								  */
-							  }							
-						  ?>
+								{
+									/*
+									?>
+									<li class="nav-item" ><a  class="nav-link" href="teams.php">Equipos</a></li>
+									<?php
+									*/
+								}							
+							?>
 						  
-						  <?php
-						  $tareasCompletadas = 0 ;
-						  $tareasPendientes = 0 ;
-						  foreach($Model->Projects as $projecto )
-						  {
-							  foreach($projecto->Tasks as $tarea)
-							  {
-								  if($tarea->Completed == true)
-								  {
-									  $tareasCompletadas++;
-								  }
-								  else
-								  {
-									  $tareasPendientes++;
-								  }
-							  }
-						  }
+							<?php
+							$tareasCompletadas = 0 ;
+							$tareasPendientes = 0 ;
+							foreach($Model->Projects as $projecto )
+							{
+								foreach($projecto->Tasks as $tarea)
+								{
+									if($tarea->Completed == true)
+									{
+										$tareasCompletadas++;
+									}
+									else
+									{
+										$tareasPendientes++;
+									}
+								}
+							}
+							
+							?>
 						  
-						  ?>
-						  <!--<li class="nav-item" >
-						  <small >Tareas Completadas: <b><?php echo $tareasCompletadas; ?></b> 
-							<br>Tareas Pendientes: <b><?php echo $tareasPendientes; ?></b> 
-						  </small>
-						  </li>
-						  -->
+							<?php
+							if($Model->Type==1)
+							{
+								?>
+								<li class="nav-item" >
+								<a class="nav-link" href="todolist.php?p=-1">Tareas asignadas</a>
+								</li>
+								<?php
+							}							
+							?>
 						  
 						</ul>
 					  
@@ -361,7 +359,7 @@ function Partial($partialToRender, $Model, $css_class)
 								{
 									?>
 									
-									  <a class="nav-link " style="color: #007bff;width:200;border:1px solid red;" href="user_upgrade.php?uid=<?php echo $Model->Id ; ?>">Versión Pro sin publicidad</a>
+									  <a class="nav-link " style="color: #007bff;width:200;border:1px solid red;" href="user_upgrade.php?uid=<?php echo $Model->Id ; ?>">Click aquí si quieres subir tus propias Clases</a>
 									
 									<?php
 								}
@@ -381,7 +379,7 @@ function Partial($partialToRender, $Model, $css_class)
 									{
 										$licenciaValida = 0;
 									}
-									//$licenciaValida = ($hoy > $finLicencia );
+									$licenciaValida = ($hoy > $finLicencia );
 									//echo "***". $licenciaValida ."***";
 									if($licenciaValida == 0
 									//|| true
@@ -389,18 +387,14 @@ function Partial($partialToRender, $Model, $css_class)
 									{
 										$Model->Licencia->ExpirarLicencia();
 									}
-
-
-
-
 									?>
-									<br> Licencia expira en: <b><?php echo  $Model->Licencia->EndDate == null ? '01-jan-2050': date("d-M-Y", strtotime($Model->Licencia->EndDate )); ?></b> 
+									<!-- <br> Licencia expira en: <b><?php echo  $Model->Licencia->EndDate == null ? '01-jan-2050': date("d-M-Y", strtotime($Model->Licencia->EndDate )); ?></b>  -->
 									<?php
 									if( ! $Model->Licencia->Activa )
 									{
 										?>
 									
-									  <a class="nav-link " style="color: #007bff;width:200;border:1px solid red;" href="user_upgrade.php?uid=<?php echo $Model->Id ; ?>">Versión Pro sin publicidad</a>
+									  <a class="nav-link " style="color: #007bff;width:200;border:1px solid red;" href="user_upgrade.php?uid=<?php echo $Model->Id ; ?>">Click aqui si necesitas gestionar muchos profesores</a>
 									
 									<?php
 									}
@@ -559,7 +553,7 @@ function Partial($partialToRender, $Model, $css_class)
 				  <div class="card-body">
 					
 					<?php
-					include_once("service_task_display.php");
+					include("service_task_display.php");
 					?>
 					
 					
@@ -742,7 +736,7 @@ function Partial($partialToRender, $Model, $css_class)
 			<?php
 			
 			$actions = array("home",  "help", "menuproject","addproject", "add","left" ,"delete", "edit", "hide", "chrono", "aula", "share", "transfer", "logout");
-			$descriptions = array("Inicio",  "AYUDA", "Mostrar/Ocultar Proyectos","Agregar Proyecto", "Agregar Tarea","Mostrar/ocultar Acciones","Borrar", "Renombrar", "Ocultar formulario", "FUNCIONES DE TIEMPO", "APOYOS DIGITALES","Asignar a otro Usuario", "Transferir de Proyecto", "Salir");
+			$descriptions = array("Inicio",  "AYUDA", "Mostrar/Ocultar Clases","Agregar Proyecto", "Agregar Tarea","Mostrar/ocultar Acciones","Borrar", "Renombrar", "Ocultar formulario", "FUNCIONES DE TIEMPO", "APOYOS DIGITALES","Asignar a otro Usuario", "Transferir de Proyecto", "Salir");
 			$i = 0 ;
 			foreach($actions as $action)
 			{				
@@ -1129,7 +1123,7 @@ function renderPartialUserNotFriends($User)
 			{
 				if($User->Type == 1)
 				{
-					renderConectUsersButton($User, $friend, "solicitar", "Conectar", "primary");
+					renderConectUsersButton($User, $friend, "solicitar", "Agregar al Grupo 01", "primary");
 				}
 
 				
@@ -1173,5 +1167,12 @@ function renderPartialUserRequests($User)
 	<?php
 }
 
+
+function renderPartialLinkCursos($nav=false)
+{
+	?>
+	<a <?php echo $nav?'class="nav-link"':''; ?> href="javascript:alert('PROXIMAMENTE');">Cursos</a>
+	<?php
+}
 
 ?>

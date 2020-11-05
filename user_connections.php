@@ -73,7 +73,7 @@ if(strlen($Model->User->Name) < 1)
 	
   
   
-	<h3>Conexiones encontradas: <small>
+	<h3>Grupo 01: <small>
 	<?php
 	if($Model->User->Friends !== null)
 	{
@@ -89,7 +89,7 @@ if(strlen($Model->User->Name) < 1)
 	renderPartialUserFriends($Model->User);
 	?>
     
-	<h3>Usuarios con quienes puedes conectar:</h3>
+	<h3>Otros usuarios para invitar a tus grupos:</h3>
 	
 	<?php
 	if($Model->User->NotFriends !== null)

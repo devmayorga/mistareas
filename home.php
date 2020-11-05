@@ -109,29 +109,38 @@ else
 	<br />
 	
     <h1 class="mt-5 mb-3 text-center">
-		PROYECTOS 
+		CLASES 
       <small>
 	  
 	 </small>
     </h1>
 
     <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        
-      </li>
-      <li class="breadcrumb-item active">Proyectos</li>
-	  <?php
-	  if($Model->User->Type != 2)
-	  {
-		  ?>
-		  <li class="breadcrumb-item" style="color: #007bff ; cursor:pointer;" id="add-project-button" >
+		<li class="breadcrumb-item">
+		</li>
+		<?php
+		if($Model->User->Type==1)
+		{
+			?>
+			<li class="breadcrumb-item" >
+			<?php renderPartialLinkCursos() ; ?>
+			</li>
+			<?php
+		}							
+		?>
+		<li class="breadcrumb-item active"><a href="home.php">Clases</a></li>
+		<?php
+		if($Model->User->Type != 2)
+		{
+			?>
+			<li class="breadcrumb-item" style="color: #007bff ; cursor:pointer;" id="add-project-button" >
 				
-				  [+]
+					[+]
 				
 			</li>
-		  <?php
-	  }
-	  ?>
+			<?php
+		}
+		?>
     </ol>
 
     <div class="row" id="projectslist">
@@ -259,9 +268,9 @@ function activateTaskItemActions()
 	
 
 $(document).ready(function(){
-	// $("#content").hide();
+	$("#content").hide();
 	
-	hideLoader();
+	setTimeout(hideLoader, 1 * 0);
 
 	$('#description').focus();
 	

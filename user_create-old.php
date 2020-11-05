@@ -79,7 +79,11 @@ else
 		{
 	
 			$User = createUser($username,$password, $artistname);
-		        if($User["validuser"])
+			if($User==null)
+			{
+				$User["validuser"] = false;
+			}
+			if($User["validuser"])
 			{
 				//$_SESSION["User"] = $User ;
 				//echo "User logged";
