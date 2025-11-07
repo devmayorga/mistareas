@@ -18,7 +18,7 @@ $sql = "select max(taskid) taskid from task";
 $res = mysqli_query($con, $sql) or die ("Error al obtener Task Id");
 $row = mysqli_fetch_assoc($res);
 $id = $row["taskid"];
-
+echo $id;
 
 
 $dal = new Dal() ;

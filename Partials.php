@@ -1,6 +1,7 @@
 <?php
 function Partial($partialToRender, $Model, $css_class)
 {
+	echo $partialToRender;
 	switch($partialToRender)
 	{
 		case "partial-project-thumbnail":
@@ -295,17 +296,20 @@ function Partial($partialToRender, $Model, $css_class)
 							<?php
 							$tareasCompletadas = 0 ;
 							$tareasPendientes = 0 ;
-							foreach($Model->Projects as $projecto )
-							{
-								foreach($projecto->Tasks as $tarea)
+							$entrarForeach = $Model->Projects != null;
+							if($entrarForeach){
+								foreach($Model->Projects as $projecto )
 								{
-									if($tarea->Completed == true)
+									foreach($projecto->Tasks as $tarea)
 									{
-										$tareasCompletadas++;
-									}
-									else
-									{
-										$tareasPendientes++;
+										if($tarea->Completed == true)
+										{
+											$tareasCompletadas++;
+										}
+										else
+										{
+											$tareasPendientes++;
+										}
 									}
 								}
 							}
@@ -337,7 +341,12 @@ function Partial($partialToRender, $Model, $css_class)
 							</div>
 							<?php
 						}
-
+						?>
+						<div style="text-align:left;">
+						<link rel="stylesheet" type="text/css" href="Partials.css">
+						<!-- <a class="nav-link " style="width: 200px; color: #007bff;width:200;/*border:1px solid red;*/ /*background-color:black;*/animation: blinker 5s ease infinite;" target="_blank" href="https://osirisshoes.com/?ref=0uxjdhzckvkg"><img src="https://cdn.shopify.com/s/files/1/0258/3933/7535/products/1343_6310_LATERAL_480x.jpg?v=1598910983" width="150"></a> -->
+						</div>
+						<?php
 					}
 					
 					?>
@@ -353,7 +362,6 @@ function Partial($partialToRender, $Model, $css_class)
 						Bienvenido <b><?php echo $Model->ArtistName ;  ?></b>
 							<br>User Id: <b><?php  echo $Model->Id ;   ?></b>
 							<br> Versión del sistema: <b><?php echo $Model->Type == 2 ? "Basic" : "Pro" ; ?></b> 
-							
 							<?php
 								if( $Model->Type==2 )
 								{
@@ -456,41 +464,25 @@ function Partial($partialToRender, $Model, $css_class)
 			include_once("task_displayModel.php");
 			$_GET["t"] = $Model->Id ; 
 			$_GET["uid"] = $_SESSION["User"]["id"];
-			
 			$Model2 = new task_displayModel($Model->Id, $_GET["uid"]);
 			?>
-			
-			
 			<div class="card">
 				<div class="card-header" role="tab" id="headingOne">
 					<a
-			name="ancla-task-<?php echo $Model->Id ; ?>"
-			 ></a>
-				  <h5 class="mb-0" ref="<?php echo $Model->Id ; ?>">
-				  
+					name="ancla-task-<?php echo $Model->Id ; ?>"
+			 		></a>
+					<h5 class="mb-0" ref="<?php echo $Model->Id ; ?>">
 				    <?php
 					if($_SESSION["User"]["type"] == 1
 						&& $_SESSION["User"]["id"] == $Model2->TaskOwner
 					)
 					{
 						?>
-						
-						
 						<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo<?php echo $Model->Id ; ?>" aria-expanded="false" aria-controls="collapseTwo<?php echo $Model->Id ; ?>"><img src="img/left-color.png" /></a>
-						
-						
-						
-						
 						<?php
 					}
 					?>
-				  
-				  
-					
-					
-					
-					<a 
-					
+					<a
 					data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $Model->Id ;?>" 
 					<?php 
 					if ( isset($_GET["ariaExpanded"]) && $_GET["ariaExpanded"] === $Model->Id  ) 
@@ -507,85 +499,54 @@ function Partial($partialToRender, $Model, $css_class)
 							
 							<?php
 						}
-
 					?>
-					
-					
 					aria-controls="collapse<?php echo $Model->Id ;?>">
 					<?php echo $Model->Name ; ?>
 					</a>
 					<?php
-					if( $_SESSION["User"]["id"] == $Model2->TaskOwner
-						
-					)
-					{
-						
-							if($Model->Completed 
-				  
-							  )
-								{
-									?>
-									<img  src="img/flag-color.png" width="64" /><a href="task_undo.php?t=<?php echo $Model->Id ; ?>"><img  src="img/undo.png" width="24" /></a>
-									<!-- <img class="chk_completed"  src="img/flag-color.png" width="64" /> -->
-									<?php
-								}
-								else
-								{
-									?>
-									<input 
-										type="checkbox" 
-									
-									
-									class="chk_completed" <?php  echo $Model->Completed == true ? "checked" : "" ; ?>
-										/>
-									
-									<?php
-								}
-						
+					if( $_SESSION["User"]["id"] == $Model2->TaskOwner)
+					{	
+						if($Model->Completed)
+						{
+							?>
+							<img  src="img/flag-color.png" width="64" /><a href="task_undo.php?t=<?php echo $Model->Id ; ?>"><img  src="img/undo.png" width="24" /></a>
+							<!-- <img class="chk_completed"  src="img/flag-color.png" width="64" /> -->
+							<?php
+						}
+						else
+						{
+							?>
+							<input 
+								type="checkbox" 
+								class="chk_completed" <?php  echo $Model->Completed == true ? "checked" : "" ; ?>
+								/>
+							<?php
+						}
 					}
-				  
-				  ?>
+					?>
+					<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree<?php echo $Model->Id ; ?>" aria-expanded="false" aria-controls="collapseThree<?php echo $Model->Id ; ?>"><img src="img/aula-black.png" /></a>
 				  </h5>
-				  
 				</div>
-
 				<div id="collapse<?php echo $Model->Id ;?>" class="<?php echo (isset($_GET["ariaExpanded"]) && $_GET["ariaExpanded"] == $Model->Id  ) ? "collapse show": "collapse"?>" role="tabpanel" aria-labelledby="heading<?php echo $Model->Id ;?>">
-				  <div class="card-body">
-					
+					<div class="card-body">
 					<?php
 					include("service_task_display.php");
 					?>
-					
-					
-				  </div>
-				  <div class="card-header text-center">
-					
-					<a class="btn btn-secondary"
-					
-					data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $Model->Id ;?>" 
-					aria-controls="collapse<?php echo $Model->Id ;?>">
-					OCULTAR RECURSOS DE LA TAREA "<?php echo $Model->Name ; ?>"
-					</a>
-					
-					
-					
+					</div>
+					<div class="card-header text-center">
+						<a class="btn btn-secondary"
+						data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $Model->Id ;?>" 
+						aria-controls="collapse<?php echo $Model->Id ;?>">
+						OCULTAR RECURSOS DE LA TAREA "<?php echo $Model->Name ; ?>"
+						</a>ç
+					</div>
 				</div>
-				</div>
-				
-				
-				
 				<?php
 					if($_SESSION["User"]["type"] == 1
 						&& $_SESSION["User"]["id"] == $Model2->TaskOwner
 					)
 					{
 						?>
-						
-						
-						
-						
-						
-						
 						<div id="collapseTwo<?php echo $Model->Id ; ?>" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
 						  <div class="card-body">
 							<h5>ACCIONES DISPONIBLES PARA LA TAREA: <small><?php echo $Model->Name ; ?></small></h5>
@@ -718,11 +679,11 @@ function Partial($partialToRender, $Model, $css_class)
 						<?php
 					}
 					?>
-				
-			
-
-
-			
+					<div id="collapseThree<?php echo $Model->Id ; ?>" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+						<?php
+						include_once("tube.php");
+						?>
+					</div>
 			<?php
 		break;
 		case "partial-tasks":
@@ -1173,6 +1134,159 @@ function renderPartialLinkCursos($nav=false)
 	?>
 	<a <?php echo $nav?'class="nav-link"':''; ?> href="javascript:alert('PROXIMAMENTE');">Cursos</a>
 	<?php
+}
+
+class AutomataSubirArchivosModel
+{
+	public $Estado;
+	public $MatrizDeTransiciones;
+	public $Modelo; // abstracto de manera que su uso es a discrecion del programador con un arrreglo asociativo
+}
+
+function renderPartialEstado0AutomataSubirArchivos($_partialModel)
+{
+	?>
+	<script src="vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript" >
+		$("#btn-1-2").click(function(){
+			var partialContainer = $(this).parent().parent();
+			var natureId = $(this).parent().find("select").val();
+			$(this).parent().parent().html("");
+			$.ajax({
+				type: "POST",
+				url: "automata_subirarchivos.php",
+				data: "from=1&type=" + <?php echo $_partialModel['type'] ;?> 
+						+ "&natureId="+natureId
+						+"&uid="+<?php echo $_partialModel["uid"] ;?>
+						+"&taskid="+<?php echo $_partialModel["taskid"] ;?>,
+				success: function(msg){
+					partialContainer.html(msg);
+				}
+			});
+		});
+	</script>
+	<!-- Trigger the modal with a button -->
+	<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Agregar archivos (new)</button>
+	<!-- Modal -->
+	<div id="myModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Agregar recurso</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<?php
+					try
+					{
+						
+						$_partialModel2 = array('uid' =>$_partialModel["uid"] , 'type'=>$_partialModel['type'], 'taskid'=>$_partialModel['taskid'], 'DocumentNatures'=>$_partialModel["DocumentNatures"]);
+						renderPartialEstado1AutomataSubirArchivos(null,$_partialModel2);
+					}
+					catch(Exception $e)
+					{
+						?>
+						<p><?php echo $e->getMessage(); ?></p>
+						<?php
+					}
+					?>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<?php
+	
+}
+function renderPartialEstado1AutomataSubirArchivos($comingFromEstado='', $_partialModel)
+{
+	if($_partialModel == null)
+	{
+		throw new Exception("KeinValidModelForEstadoException");
+	}
+	if( $_partialModel["uid"]  == null || $_partialModel["type"]  == null || $_partialModel["taskid"]  == null)
+	{
+		throw new Exception("KeinValidModelForEstadoException");
+
+	}
+	?>
+	<form action="" method="post" style="margin-top: 20px; " enctype="multipart/form-data" >
+		<input type="hidden" name="userid" value="<?php echo $_partialModel["uid"] ; ?>" />
+		<input type="hidden" name="documentType" value="<?php echo $_partialModel["type"] ; ?>" />
+		<input type="hidden" name="taskid" value="<?php echo $_partialModel["taskid"]; ?>" />
+		<?php
+		switch($_partialModel["type"])
+		{
+			case "1":
+			case "2":
+			case "3":
+			// for($i = 1 ; $i < 2; $i++)
+			// {
+				?>
+				<label for="nature">Seleccione el tipo de recurso:</label>
+				<select id="nature" name="nature">
+					<?php
+					foreach($_partialModel['DocumentNatures'] as $nature)
+					{
+						?>
+						<option value="<?php echo $nature->Id ; ?>"><?php echo $nature->Name  == "Undefined" ? "Sin definir" : $nature->Name ; ?></option>
+						<?php
+					}
+					?>
+				</select>
+				<br />
+				<!-- <label for="file">Seleccione un archivo:</label>
+				<input type="file" name="filetoupload<?php echo $i ; ?>" id="file<?php echo $i ; ?>"><br /> -->
+				
+				<?php
+			// }
+			break;
+			default:
+			echo "Something went really wrong... You should try to go back";
+		}
+		?>
+		<!-- Trigger the modal with a button -->
+		<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal2" id="btn-1-2">Siguiente</button>
+	</form>
+	<?php
+}
+
+
+function renderPartialEstado2AutomataSubirArchivos($action, $_partialModel)
+{
+	if($action=="examinar")
+	{
+		?>
+		<form action="subirarchivos.php" method="post" style="margin-top: 20px;" enctype="multipart/form-data" >
+			<input type="hidden" name="userid" value="<?php echo $_partialModel["uid"] ; ?>" />
+			<input type="hidden" name="documentType" value="<?php echo $_partialModel["type"] ; ?>" />
+			<input type="hidden" name="documentType" value="<?php echo $_partialModel["type"] ; ?>" />
+			<input type="hidden" name="taskid" value="<?php echo $_partialModel["taskid"]; ?>" />
+			<input type="hidden" name="nature" value="<?php echo $_partialModel["nature"]; ?>" />
+			<label for="file">Seleccione un archivo:</label>
+			<input type="file" name="filetoupload1" id="file1"><br />
+			<input class="btn btn-success" type="submit" name="enviar" value="subir archivo" />
+		</form>
+		<?php
+	}
+	else
+	{
+		?>
+		ESCRIBA LINK
+		<?php
+	}
+	?>
+	<!-- Trigger the modal with a button -->
+	<button type="button" class="btn btn-info btn-lg" data-show="modal" data-target="#myModal" id="btn-2-1">Volver</button>
+	<?php
+}
+
+function renderPartialEstado3AutomataSubirArchivos()
+{
+	return "Escribir URL";
 }
 
 ?>

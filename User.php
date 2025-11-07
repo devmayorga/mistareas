@@ -8,6 +8,7 @@ class User
 	public $Projects ;
 	private $Dal ;
 	public $Email ="" ;
+	public $EmailName ="" ;
 	public $Type = 0 ;
     public $Features ;
 	public $Friends ;

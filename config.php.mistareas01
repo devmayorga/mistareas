@@ -1,0 +1,18 @@
+<?php
+class Config{
+	
+	public $User ;
+	public $Password;
+	public $Host ;
+	public $Database ;
+	
+	function __construct()
+	{
+		$this->User = "cont8ffe_mistareas01" ;
+		$this->Password = "*DP.e-OWsIfu" ;
+		$this->Host = "localhost" ;
+		$this->Database = "cont8ffe_mistareas01" ;
+	}
+}
+
+?>

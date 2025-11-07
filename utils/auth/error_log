@@ -1,0 +1,7 @@
+[20-Sep-2023 16:30:48 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: YES) in /home/cont8ffe/public_html/mistareas.com.mx/db/connect.php:8
+Stack trace:
+#0 /home/cont8ffe/public_html/mistareas.com.mx/db/connect.php(8): mysqli_connect()
+#1 /home/cont8ffe/public_html/mistareas.com.mx/db/dal.php(6): include('/home/cont8ffe/...')
+#2 /home/cont8ffe/public_html/mistareas.com.mx/utils/auth/login3.php(99): authenticateUser()
+#3 {main}
+  thrown in /home/cont8ffe/public_html/mistareas.com.mx/db/connect.php on line 8

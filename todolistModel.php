@@ -12,7 +12,7 @@ class todolistModel{
 		try
 		{
 		$this->User = $this->Dal->getUser($p_userid);
-		$this->Dal->Close();
+		// $this->Dal->Close();
 		$this->Dal = new Dal();
 		$this->User->Features = $this->Dal->getUserFeatures($this->User->Id);
 		$this->Dal->Close();
@@ -30,14 +30,16 @@ class todolistModel{
 		$this->Dal->Close();
 		$this->Dal = new Dal();
 		$this->User->Licencia = $this->Dal->getUserLicencia($this->User->Id);
+		// echo "Model Created";
 		}
 		catch (Exception $e)
 		{
+			echo $e->getMessage();
 			echo "todolistModel Catched the Exception";
 		}
 		// finally
 		// {
-			$this->Dal->Close();
+			//$this->Dal->Close();
 		// }
 		
 	}

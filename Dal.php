@@ -77,6 +77,8 @@ class Dal
 			$user->Id = $row["id"];
 			try
 			{
+				$this->con = mysqli_connect($this->h, $this->u, $this->p)or die ("Error de autenticacion... MySQL Dice: " . mysqli_error($con));
+				$this->con->select_db($this->db ) or die ("Error al seleccionar la BD...");
 				$user->Projects=$this->getUserProjects($user->Id);
 				//$user->Features=$this->getUserFeatures($user->Id);
 			}
@@ -333,11 +335,13 @@ class Dal
 		$virtualProjectId_AssignedTasks = -1 ;
 		$projects[] = new Project($virtualProjectId_AssignedTasks, "tareas asignadas", $p_userid) ;
 		$sql = "select id
-			, name from project where userid = " . $p_userid;
+		, name from project where userid = " . $p_userid;
+		//  . ' or project.id in(select projectid from r_project_user where userid = '. $p_userid .')' ;
 		// $res = mysqli_query($this->con,$sql) or die ("Error al leer los Clases de la BD... MySQL dice: " . mysqli_error($this->con));
-		$res = mysqli_query($this->con,$sql) ;
+		$res = mysqli_query($this->con,$sql) or die("Error al leer los Proyectos de la BD... MySQL dice: " . mysqli_error($this->con)) ;
 		if (!$res)
 		{
+			echo "getUserProjects";
 			throw new Exception('SesionExpiradaException');
 		}
 		while($row = mysqli_fetch_assoc($res))
@@ -409,10 +413,10 @@ class Dal
 		$method = "Dal.getTaskDocuments";
 		try
 		{
-			mysqli_begin_transaction($this->con);
+			// mysqli_begin_transaction($this->con);
 			$sql = " CALL `sp_getTaskDocuments`('". $taskid ."');";
 			$res = mysqli_query($this->con, $sql) or die ("Error in method ". $method ."... MySQL dice: " . mysqli_error($this->con) );
-			mysqli_commit($this->con);
+			// mysqli_commit($this->con);
 			$this->Close();
 			
 			while($row = mysqli_fetch_assoc($res))
@@ -436,7 +440,7 @@ class Dal
 		}
 		catch (Exception $e) 
 		{
-			mysqli_rollback($this->con);
+			// mysqli_rollback($this->con);
 			return false ;
 		}
 		
@@ -570,18 +574,20 @@ class Dal
 	// JM - Created for Ivan to test the Plattform and isolate his users from mines
 	function getUserFeatures($userid)
 	{
+		// $this->con = mysqli_connect($this->h, $this->u, $this->p)or die ("Error de autenticacion... MySQL Dice: " . mysqli_error($this->con));
+		// $this->con->select_db($this->db ) or die ("Error al seleccionar la BD...");
 		$Features = null ;
 		include_once("Feature.php");
 		$method = "Dal.getUserFeatures";
 		try
 		{
-			mysqli_begin_transaction($this->con);
+			// mysqli_begin_transaction($this->con);
 			
 			$sql = " CALL `sp_getUserFeatures`('". $userid ."');";
 			//die($sql);
 			$res = mysqli_query($this->con,$sql) or die ("Error in method ". $method ."... MySQL dice: " . mysqli_error($this->con) );
 			
-			mysqli_commit($this->con);
+			// mysqli_commit($this->con);
 			while($row = mysqli_fetch_assoc($res))
 			{
 				$Feature = new Feature(
@@ -595,7 +601,8 @@ class Dal
 		}
 		catch (Exception $e) 
 		{
-			mysqli_rollback($this->con);
+			die($e->getMessage());
+			// mysqli_rollback($this->con);
 			$Features[] = new Feature();
 		}
 		// finally
@@ -930,6 +937,7 @@ class Dal
 		{
 			$licencia = null ;
 		}
+		echo "***" . $licencia->StartDate;
 
 		return $licencia ;
 	}

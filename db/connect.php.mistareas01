@@ -1,0 +1,11 @@
+<?php
+
+$u = "cont8ffe_mistareas01" ;
+$p = "*DP.e-OWsIfu" ;
+$h = "localhost" ;
+$db = "cont8ffe_mistareas01" ;
+
+$con = mysqli_connect($h, $u, $p)or die ("Error de autenticacion... MySQL Dice: " . mysqli_error($con));
+$res = mysqli_select_db($con, $db ) or die ("Error al seleccionar la BD... MySQL Dice: " . mysqli_error($con));
+
+?>

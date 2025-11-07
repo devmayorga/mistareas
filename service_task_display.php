@@ -112,7 +112,7 @@ if(!empty($_GET["t"]) && !empty($_GET["uid"]) ){
 								}
 								else
 								{
-									$listaConHeader .= "<a href='content/documents/tasks/". $Model2->Task->Id ."/". $document->Url 
+									$listaConHeader .= "<br /><a href='document_display.php?p1=". $Model2->Task->Id ."&p2=". $document->Url 
 									."'>" 
 									. "Recurso Académico " . $j   .  ( $document->Nature->Name == "Undefined" ? "" : "(" . $document->Nature->Name . ")" ) 
 									//. $document->Url 

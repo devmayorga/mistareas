@@ -199,11 +199,9 @@ else
 		}
 		?>
     </ol>
-	
 	<?php
 	Partial("partial-task-add", $currentProject, "");
 	?>
-
 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	  <div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -226,29 +224,14 @@ else
 		</div>
 	  </div>
 	</div>
-
-
-
-
-
     <div class="mb-4" id="accordion" role="tablist" aria-multiselectable="true">
-      
 	  <?php
 		foreach($currentProject->Tasks as $task)
 		{
-			
-			
-			  Partial("partial-task-display", $task, "");
-			
-			
-			
+			Partial("partial-task-display", $task, "");
 		}
-	  
 	  ?>
-	  
-	  
 	 </div>
-
   </div>
   <!-- /.container -->
 

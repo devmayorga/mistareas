@@ -78,8 +78,6 @@ Rosa
 
 /*PROJECT'S GRID*/
 #projectslist{
-	display: grid;
-	grid-template-columns:  100% ;	
 }
 
 .header

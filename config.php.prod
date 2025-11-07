@@ -9,7 +9,7 @@ class Config{
 	function __construct()
 	{
 		$this->User = "cont8ffe" ;
-		$this->Password = "oJGZQ8KSlzZ04K0r" ;
+		$this->Password = "C#Eju@C)#L6!" ;
 		$this->Host = "localhost" ;
 		$this->Database = "cont8ffe_todolist" ;
 	}

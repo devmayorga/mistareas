@@ -1,0 +1,12 @@
+[22-May-2024 16:36:12 America/New_York] PHP Warning:  Attempt to read property "EndDate" on null in /home/cont8ffe/public_html/mistareas.com.mx/Partials.php on line 387
+[22-May-2024 16:36:12 America/New_York] PHP Warning:  Attempt to read property "EndDate" on null in /home/cont8ffe/public_html/mistareas.com.mx/Partials.php on line 407
+[22-May-2024 16:36:12 America/New_York] PHP Warning:  Attempt to read property "Activa" on null in /home/cont8ffe/public_html/mistareas.com.mx/Partials.php on line 409
+[22-May-2024 16:36:12 America/New_York] PHP Fatal error:  Uncaught mysqli_sql_exception: Commands out of sync; you can't run this command now in /home/cont8ffe/public_html/mistareas.com.mx/Dal.php:440
+Stack trace:
+#0 /home/cont8ffe/public_html/mistareas.com.mx/Dal.php(440): mysqli_rollback()
+#1 /home/cont8ffe/public_html/mistareas.com.mx/task_displayModel.php(39): Dal->getTaskDocuments()
+#2 /home/cont8ffe/public_html/mistareas.com.mx/task_displayModel.php(25): task_displayModel->retrieveDocuments()
+#3 /home/cont8ffe/public_html/mistareas.com.mx/Partials.php(475): task_displayModel->__construct()
+#4 /home/cont8ffe/public_html/mistareas.com.mx/todolist.php(231): Partial()
+#5 {main}
+  thrown in /home/cont8ffe/public_html/mistareas.com.mx/Dal.php on line 440
